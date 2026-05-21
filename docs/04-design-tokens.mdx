@@ -1,0 +1,164 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Documentação/Design Tokens" />
+
+export const Swatch = ({ name, value, ring }) => (
+  <div style={{ width: 128 }}>
+    <div
+      style={{
+        height: 72,
+        borderRadius: 8,
+        background: value,
+        border: "1px solid #e9e3db",
+        boxShadow: ring ? "inset 0 0 0 1px rgba(0,0,0,0.04)" : undefined,
+      }}
+    />
+    <div style={{ marginTop: 6, fontSize: 13, fontWeight: 600 }}>{name}</div>
+    <code style={{ fontSize: 12, opacity: 0.6 }}>{value}</code>
+  </div>
+);
+
+export const Row = ({ children }) => (
+  <div style={{ display: "flex", flexWrap: "wrap", gap: 16, margin: "16px 0" }}>
+    {children}
+  </div>
+);
+
+# Design Tokens
+
+A identidade visual da Lamora é **minimalista**: neutros quentes, muito espaço
+em branco e um único acento dourado. Os tokens são definidos em CSS, via
+`@theme`, no arquivo `src/app/globals.css`.
+
+## Paleta de cores
+
+### Superfícies e texto
+
+<Row>
+  <Swatch name="background" value="#faf8f5" ring />
+  <Swatch name="surface" value="#ffffff" ring />
+  <Swatch name="foreground" value="#221d1a" />
+  <Swatch name="muted" value="#8a807a" />
+  <Swatch name="border" value="#e9e3db" />
+</Row>
+
+### Marca e acento
+
+<Row>
+  <Swatch name="primary" value="#2a2420" />
+  <Swatch name="primary-foreground" value="#faf8f5" ring />
+  <Swatch name="accent" value="#b08d57" />
+  <Swatch name="accent-foreground" value="#221d1a" />
+</Row>
+
+<table>
+  <thead>
+    <tr>
+      <th>Token</th>
+      <th>Uso</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>background</code>
+      </td>
+      <td>Fundo das páginas</td>
+    </tr>
+    <tr>
+      <td>
+        <code>surface</code>
+      </td>
+      <td>Fundo de cards e painéis</td>
+    </tr>
+    <tr>
+      <td>
+        <code>foreground</code>
+      </td>
+      <td>Texto principal</td>
+    </tr>
+    <tr>
+      <td>
+        <code>muted</code>
+      </td>
+      <td>Texto secundário, placeholders</td>
+    </tr>
+    <tr>
+      <td>
+        <code>border</code>
+      </td>
+      <td>Bordas suaves</td>
+    </tr>
+    <tr>
+      <td>
+        <code>primary</code>
+      </td>
+      <td>Botões e CTAs principais</td>
+    </tr>
+    <tr>
+      <td>
+        <code>primary-foreground</code>
+      </td>
+      <td>
+        Texto sobre <code>primary</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>accent</code>
+      </td>
+      <td>Destaques sutis (dourado)</td>
+    </tr>
+  </tbody>
+</table>
+
+## Tipografia
+
+<p style={{ fontFamily: "Georgia, 'Times New Roman', serif", fontSize: 36 }}>
+  Lamora — perfumaria
+</p>
+<p style={{ fontSize: 16 }}>
+  O corpo de texto usa uma fonte sans-serif limpa para boa legibilidade.
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Token</th>
+      <th>Família</th>
+      <th>Uso</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>--font-sans</code>
+      </td>
+      <td>Geist + fallbacks de sistema</td>
+      <td>Corpo de texto, interface</td>
+    </tr>
+    <tr>
+      <td>
+        <code>--font-serif</code>
+      </td>
+      <td>Georgia, Times New Roman, serif</td>
+      <td>Títulos e destaques</td>
+    </tr>
+  </tbody>
+</table>
+
+## Como usar
+
+Os tokens viram utilitários do Tailwind automaticamente. Use as classes em vez
+de valores fixos:
+
+```tsx
+<div className="bg-surface text-foreground border-border border">
+  <h2 className="text-foreground font-serif">Título</h2>
+  <p className="text-muted">Descrição secundária.</p>
+  <button className="bg-primary text-primary-foreground">Comprar</button>
+</div>
+```
+
+Para classes condicionais, sempre use o utilitário `cn()` de
+`shared/lib/utils.ts` — nunca concatene strings de classe na mão.

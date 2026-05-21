@@ -1,0 +1,81 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Documentação/Componentes" />
+
+# Componentes
+
+Regras para manter os componentes limpos e consistentes. Toda IA ou pessoa que
+escrever um componente segue este checklist.
+
+## Anatomia
+
+Ordem fixa dentro do arquivo: **imports → tipos/props → componente → export**.
+Dentro do componente: **hooks → handlers → render**.
+
+```tsx
+import { useState } from "react";
+import { cn } from "@/shared/lib/utils";
+import type { Product } from "../types/product.types";
+
+interface ProductCardProps {
+  product: Product;
+  onAddToCart: (id: string) => void;
+}
+
+export function ProductCard({ product, onAddToCart }: ProductCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleAdd = () => onAddToCart(product.id);
+
+  return <article className={cn("rounded-lg border p-4")}>{/* ... */}</article>;
+}
+```
+
+## Regras inegociáveis
+
+1. **Um componente, uma responsabilidade.** Se o nome precisa de "and" para
+   descrever o que faz, divida.
+2. **Limite de tamanho.** Acima de ~150 linhas, quebre em subcomponentes ou
+   hooks.
+3. **Props explícitas, sem `any`.** Toda prop tem tipo; use `interface`.
+4. **Server Component por padrão.** `"use client"` só quando houver `useState`,
+   `useEffect`, eventos de DOM ou hooks de browser — e na folha mais funda.
+5. **Lógica fora do JSX.** Cálculos e condições viram variáveis nomeadas ou
+   hooks antes do `return`.
+6. **Sem ternários aninhados no JSX.** Um nível é o máximo.
+7. **`className` via `cn()`.** Nunca concatene strings de classe na mão.
+8. **Eventos com `handle`, callbacks com `on`.** `handleSubmit`, `onAddToCart`.
+9. **Comente o _porquê_, nunca o _o quê_.**
+10. **Estado mínimo.** Não guarde no estado o que dá para derivar no render.
+
+## Acessibilidade
+
+Não é opcional. Todo elemento interativo é focável e tem rótulo. Imagens têm
+`alt`. Modais e o carrinho off-canvas prendem o foco e fecham no `Esc`. Prefira
+elementos semânticos (`<button>`, `<nav>`, `<article>`) a `<div>` com `onClick`.
+
+## Componentes genéricos e Storybook
+
+Os primitivos genéricos vivem em `src/shared/components/ui/` e seguem uma
+convenção própria:
+
+1. **Uma pasta por componente** — o componente, sua story e um barrel:
+
+   ```
+   shared/components/ui/
+   ├── Button/
+   │   ├── Button.tsx
+   │   ├── Button.stories.tsx
+   │   └── index.ts
+   └── index.ts
+   ```
+
+2. **Story obrigatória.** Todo componente genérico de `shared/` tem um arquivo
+   `Component.stories.tsx` no formato CSF3, ao lado do componente.
+
+3. **Cobertura mínima.** A story exercita o estado padrão, cada `variant`/`size`
+   e os estados de erro/desabilitado quando existirem.
+
+O Storybook é a documentação viva e o ambiente isolado desses primitivos — eles
+são construídos e revisados ali antes de serem usados pelas features. Veja os
+exemplos interativos na seção **UI** da barra lateral.

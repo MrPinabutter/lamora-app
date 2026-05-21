@@ -1,0 +1,13 @@
+.next/
+out/
+build/
+node_modules/
+coverage/
+storybook-static/
+pnpm-lock.yaml
+next-env.d.ts
+prisma/migrations/
+
+# Docs de instrução mantidos manualmente.
+AGENTS.md
+CLAUDE.md

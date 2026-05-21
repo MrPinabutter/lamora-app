@@ -1,0 +1,82 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Documentação/Introdução" />
+
+# Lamora
+
+**Lamora** é um e-commerce de perfumaria — perfumes, hidratantes, esfoliantes e
+skin care — com uma curadoria minimalista. Esta documentação reúne tudo o que
+você precisa para entender, rodar e contribuir com o projeto.
+
+## O que entra no MVP
+
+O primeiro lançamento foca no essencial para validar o negócio:
+
+- **Landing page** — identidade da marca, mais vendidos, marcas parceiras e
+  depoimentos.
+- **Catálogo** — listagem com filtros (categoria, marca, faixa de preço),
+  ordenação e página de detalhe do produto com pirâmide olfativa.
+- **Carrinho** — sidebar off-canvas com finalização via **WhatsApp** (sem
+  checkout de pagamento no MVP).
+- **Contas de usuário** — cadastro com consentimento LGPD, login, perfil e
+  exclusão de conta com anonimização.
+- **Painel administrativo** — CRUD de produtos, gestão de usuários e um
+  dashboard de métricas de conversão.
+
+> Pagamento integrado, avaliações e wishlist ficam para o **v2** — a estrutura
+> feature-first já acomoda esses domínios sem reescrita.
+
+## Stack
+
+<table>
+  <thead>
+    <tr>
+      <th>Camada</th>
+      <th>Tecnologia</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Framework</td>
+      <td>Next.js 16 (App Router, Server Components)</td>
+    </tr>
+    <tr>
+      <td>Linguagem</td>
+      <td>
+        TypeScript (<code>strict</code>)
+      </td>
+    </tr>
+    <tr>
+      <td>Estado</td>
+      <td>Zustand 5</td>
+    </tr>
+    <tr>
+      <td>Dados</td>
+      <td>PostgreSQL 16 + Prisma 6</td>
+    </tr>
+    <tr>
+      <td>Forms</td>
+      <td>React Hook Form 7 + Zod 3</td>
+    </tr>
+    <tr>
+      <td>Estilo</td>
+      <td>
+        Tailwind CSS 4 (<code>@theme</code>)
+      </td>
+    </tr>
+    <tr>
+      <td>UI Docs</td>
+      <td>Storybook 10</td>
+    </tr>
+  </tbody>
+</table>
+
+## Como navegar esta documentação
+
+- **Começando** — instalar dependências, subir o banco e rodar o projeto.
+- **Arquitetura** — os princípios feature-first e a organização de pastas.
+- **Design Tokens** — a paleta da marca e a tipografia.
+- **Componentes** — as regras para escrever componentes limpos e suas stories.
+
+Os componentes genéricos de interface ficam catalogados na seção **UI** da
+barra lateral, cada um com exemplos interativos.
