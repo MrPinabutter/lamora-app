@@ -1,0 +1,110 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Documentation/Architecture" />
+
+# Architecture
+
+The project follows a **feature-first** organization: code that changes
+together stays together.
+
+## Four non-negotiable principles
+
+1. **Feature-first, not type-first.** Each feature (`products`, `cart`, `auth`)
+   contains its own components, hooks, stores, services and types. Global
+   folders exist only for what is genuinely shared.
+2. **Server Components by default.** Every component is a Server Component until
+   it needs interactivity. `"use client"` is a deliberate exception, placed as
+   deep in the tree as possible (at the leaves).
+3. **Unidirectional dependencies.** The flow is always
+   `app/ → features/ → shared/`. A feature never imports another feature
+   directly.
+4. **Logic outside the JSX.** Components render. Hooks orchestrate. Services
+   fetch and transform data. Stores hold UI state.
+
+## Folder structure
+
+```
+src/
+├── app/        Routing and composition. No business rules.
+├── features/   The heart of the app. One folder per domain.
+├── shared/     Generic, shared across 2+ features.
+├── store/      Combination of the Zustand slices.
+└── server/     Server infrastructure, never imported on the client.
+```
+
+Each feature exposes its public API through an `index.ts` barrel — only what is
+exported there can be imported from outside.
+
+## Layers and boundaries
+
+The dependency flow is strictly unidirectional:
+
+<table>
+  <thead>
+    <tr>
+      <th>Layer</th>
+      <th>May import from</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>app</code>
+      </td>
+      <td>
+        <code>features</code>, <code>shared</code>, <code>store</code>,{" "}
+        <code>server</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>features</code>
+      </td>
+      <td>
+        <code>shared</code>, <code>store</code>, the feature itself
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>shared</code>
+      </td>
+      <td>
+        <code>shared</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>server</code>
+      </td>
+      <td>
+        <code>shared</code>, <code>server</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>store</code>
+      </td>
+      <td>
+        <code>features</code>, <code>shared</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+These rules are **not just a convention**: `eslint-plugin-boundaries` enforces
+them during lint. An import that crosses a forbidden boundary breaks the build.
+
+## Data access
+
+Every read and write goes through a **service layer** (`features/*/services/`).
+Components and Server Actions call services — never Prisma directly. Importing
+`@prisma/client` outside of `server/` is blocked by ESLint.
+
+Server-sensitive files carry the `import "server-only"` directive to guarantee
+they never end up in a client bundle.
+
+## Mutations
+
+Mutations (sign-up, CRUD, account deletion) use **Server Actions**. Validation
+happens with a **single Zod schema**, shared between the form (client) and the
+action (server) — never trust the client alone.

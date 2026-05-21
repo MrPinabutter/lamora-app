@@ -1,0 +1,166 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Documentation/Components" />
+
+# Components
+
+Rules for keeping components clean and consistent. Every AI or person who
+writes a component follows this checklist.
+
+## Anatomy
+
+Fixed order within the file: **imports → types/props → component → export**.
+Inside the component: **hooks → handlers → render**.
+
+```tsx
+import { useState } from "react";
+import { cn } from "@/shared/lib/utils";
+import type { Product } from "../types/product.types";
+
+interface ProductCardProps {
+  product: Product;
+  onAddToCart: (id: string) => void;
+}
+
+export function ProductCard({ product, onAddToCart }: ProductCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleAdd = () => onAddToCart(product.id);
+
+  return <article className={cn("rounded-lg border p-4")}>{/* ... */}</article>;
+}
+```
+
+## Non-negotiable rules
+
+1. **One component, one responsibility.** If the name needs an "and" to
+   describe what it does, split it.
+2. **Size limit.** Above ~150 lines, break it into subcomponents or hooks.
+3. **Explicit props, no `any`.** Every prop has a type; use `interface`.
+4. **Server Component by default.** `"use client"` only when there is
+   `useState`, `useEffect`, DOM events or browser hooks — and at the deepest
+   leaf.
+5. **Logic outside the JSX.** Calculations and conditions become named
+   variables or hooks before the `return`.
+6. **No nested ternaries in the JSX.** One level is the maximum.
+7. **Styling via `tailwind-variants`.** A component's variations are defined
+   with `tv()`; for one-off conditional merging, use `cn()`. Never concatenate
+   class strings by hand.
+8. **Events with `handle`, callbacks with `on`.** `handleSubmit`, `onAddToCart`.
+9. **Comment the _why_, never the _what_.**
+10. **Minimal state.** Don't store in state what can be derived in the render.
+
+## Accessibility
+
+It is not optional. Every interactive element is focusable and has a label.
+Images have `alt`. Modals and the off-canvas cart trap focus and close on
+`Esc`. Prefer semantic elements (`<button>`, `<nav>`, `<article>`) over a
+`<div>` with `onClick`.
+
+## Atomic Design
+
+The primitives in `src/shared/components/ui/` are organized by the **Atomic
+Design** methodology. Each component belongs to a level, and the level dictates
+the folder where it lives:
+
+<table>
+  <thead>
+    <tr>
+      <th>Level</th>
+      <th>What it is</th>
+      <th>In the project today</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>atoms/</code>
+      </td>
+      <td>
+        Indivisible building blocks. They depend on no other UI component.
+      </td>
+      <td>
+        <code>Button</code>, <code>Input</code>, <code>Spinner</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>molecules/</code>
+      </td>
+      <td>
+        Small groups of atoms with a single purpose — e.g. a field (label +
+        input + error message).
+      </td>
+      <td>— empty, reserved to grow</td>
+    </tr>
+    <tr>
+      <td>
+        <code>organisms/</code>
+      </td>
+      <td>
+        Composed, self-contained sections with their own layout and structure.
+      </td>
+      <td>
+        <code>Modal</code>, <code>Drawer</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+The **templates** and **pages** levels of classic Atomic Design do not become
+folders in `shared/`: they correspond to the composition done in `app/` and in
+the `features/`. `shared/` stops at the **generic** organisms — anything
+specific to a domain lives in its feature, not here.
+
+### Where to put a new component
+
+Ask, in this order:
+
+1. **Is it specific to a domain (`products`, `cart`, …)?** Yes → it goes to the
+   feature, not to `shared/`.
+2. **Does it compose other UI components?** No → it is an **atom**.
+3. **Is it a handful of atoms with a single purpose?** Yes → **molecule**.
+4. **Is it a whole section of the interface, with its own layout?** Yes →
+   **organism**.
+
+The dependency between levels is unidirectional: `organisms → molecules →
+atoms`. An atom never imports a molecule; a molecule never imports an organism.
+
+## Generic components and Storybook
+
+Each component in `shared/components/ui/` follows its own convention:
+
+1. **One folder per component, inside its level.** The folder holds only the
+   component and its story:
+
+   ```
+   shared/components/ui/
+   ├── atoms/
+   │   ├── Button/
+   │   │   ├── Button.tsx
+   │   │   └── Button.stories.tsx
+   │   ├── Input/
+   │   └── Spinner/
+   ├── molecules/
+   ├── organisms/
+   │   ├── Modal/
+   │   └── Drawer/
+   └── index.ts
+   ```
+
+2. **No barrel per component.** The component is exported straight from its own
+   file (`export function Button`). There is a **single** barrel — the
+   `index.ts` at the root of `ui/` — which re-exports the public API and is the
+   only import path from outside (`@/shared/components/ui`).
+
+3. **Story required.** Every component has a `Component.stories.tsx` in CSF3
+   format, next to the component. The story's `title` reflects the level:
+   `Atoms/Button`, `Organisms/Modal`.
+
+4. **Minimum coverage.** The story exercises the default state, each
+   `variant`/`size` and the error/disabled states when they exist.
+
+Storybook is the living documentation and the isolated environment for these
+primitives — they are built and reviewed there before being used by the
+features. See the interactive examples in the **Atoms**, **Molecules** and
+**Organisms** sections of the sidebar.

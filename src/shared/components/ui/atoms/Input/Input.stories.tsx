@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { Input } from "./Input";
 
 const meta = {
-  title: "UI/Input",
+  title: "Atoms/Input",
   component: Input,
   tags: ["autodocs"],
   parameters: { layout: "centered" },

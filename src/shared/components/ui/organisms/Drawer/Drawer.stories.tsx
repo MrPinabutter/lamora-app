@@ -1,10 +1,10 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { Button } from "../Button";
+import { Button } from "../../atoms/Button/Button";
 import { Drawer } from "./Drawer";
 
 const meta = {
-  title: "UI/Drawer",
+  title: "Organisms/Drawer",
   component: Drawer,
   tags: ["autodocs"],
   parameters: { layout: "centered" },

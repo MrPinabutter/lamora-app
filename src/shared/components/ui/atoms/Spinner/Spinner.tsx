@@ -1,4 +1,8 @@
-import { cn } from "@/shared/lib/utils";
+import { tv } from "tailwind-variants";
+
+const spinner = tv({
+  base: "size-5 animate-spin text-current",
+});
 
 interface SpinnerProps {
   className?: string;
@@ -9,7 +13,7 @@ export function Spinner({ className, label = "Carregando" }: SpinnerProps) {
   return (
     <span role="status" aria-label={label} className="inline-flex">
       <svg
-        className={cn("size-5 animate-spin text-current", className)}
+        className={spinner({ className })}
         viewBox="0 0 24 24"
         fill="none"
         aria-hidden="true"

@@ -1,0 +1,153 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Documentation/Getting Started" />
+
+# Getting Started
+
+Guide to get the project running locally.
+
+## Prerequisites
+
+- **Node.js** 20 or higher
+- **pnpm** (the project's package manager)
+- **Docker** — used to bring up the local PostgreSQL
+
+## 1. Install dependencies
+
+```bash
+pnpm install
+```
+
+## 2. Environment variables
+
+Copy the example file and adjust it if needed:
+
+```bash
+cp .env.example .env
+```
+
+<table>
+  <thead>
+    <tr>
+      <th>Variable</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>DATABASE_URL</code>
+      </td>
+      <td>Connection to PostgreSQL</td>
+    </tr>
+    <tr>
+      <td>
+        <code>STORE_PHONE</code>
+      </td>
+      <td>Store phone number for WhatsApp checkout</td>
+    </tr>
+  </tbody>
+</table>
+
+## 3. Bring up the database
+
+PostgreSQL runs in a Docker container (port **5433** on the host):
+
+```bash
+docker compose up -d db
+```
+
+Then apply the migrations and generate the Prisma Client:
+
+```bash
+pnpm db:migrate
+```
+
+## 4. Run the project
+
+```bash
+pnpm dev          # application at http://localhost:3000
+pnpm storybook    # Storybook at http://localhost:6006
+```
+
+## Available scripts
+
+<table>
+  <thead>
+    <tr>
+      <th>Script</th>
+      <th>What it does</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>pnpm dev</code>
+      </td>
+      <td>Starts the application in development mode</td>
+    </tr>
+    <tr>
+      <td>
+        <code>pnpm build</code>
+      </td>
+      <td>Production build (includes type checking)</td>
+    </tr>
+    <tr>
+      <td>
+        <code>pnpm start</code>
+      </td>
+      <td>Serves the production build</td>
+    </tr>
+    <tr>
+      <td>
+        <code>pnpm lint</code>
+      </td>
+      <td>Runs ESLint</td>
+    </tr>
+    <tr>
+      <td>
+        <code>pnpm format</code>
+      </td>
+      <td>Formats the code with Prettier</td>
+    </tr>
+    <tr>
+      <td>
+        <code>pnpm format:check</code>
+      </td>
+      <td>Checks formatting without changing files</td>
+    </tr>
+    <tr>
+      <td>
+        <code>pnpm db:migrate</code>
+      </td>
+      <td>Creates and applies Prisma migrations</td>
+    </tr>
+    <tr>
+      <td>
+        <code>pnpm db:generate</code>
+      </td>
+      <td>Regenerates the Prisma Client</td>
+    </tr>
+    <tr>
+      <td>
+        <code>pnpm db:studio</code>
+      </td>
+      <td>Opens Prisma Studio</td>
+    </tr>
+    <tr>
+      <td>
+        <code>pnpm storybook</code>
+      </td>
+      <td>Starts Storybook in development mode</td>
+    </tr>
+    <tr>
+      <td>
+        <code>pnpm build-storybook</code>
+      </td>
+      <td>Builds the static Storybook</td>
+    </tr>
+  </tbody>
+</table>
+
+> Remember to bring up the database (`docker compose up -d db`) before running
+> `pnpm db:migrate` or `pnpm dev`.

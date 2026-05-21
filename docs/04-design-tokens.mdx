@@ -1,6 +1,6 @@
 import { Meta } from "@storybook/addon-docs/blocks";
 
-<Meta title="Documentação/Design Tokens" />
+<Meta title="Documentation/Design Tokens" />
 
 export const Swatch = ({ name, value, ring }) => (
   <div style={{ width: 128 }}>
@@ -26,13 +26,13 @@ export const Row = ({ children }) => (
 
 # Design Tokens
 
-A identidade visual da Lamora é **minimalista**: neutros quentes, muito espaço
-em branco e um único acento dourado. Os tokens são definidos em CSS, via
-`@theme`, no arquivo `src/app/globals.css`.
+Lamora's visual identity is **minimalist**: warm neutrals, plenty of white
+space and a single golden accent. The tokens are defined in CSS, via `@theme`,
+in the `src/app/globals.css` file.
 
-## Paleta de cores
+## Color palette
 
-### Superfícies e texto
+### Surfaces and text
 
 <Row>
   <Swatch name="background" value="#faf8f5" ring />
@@ -42,7 +42,7 @@ em branco e um único acento dourado. Os tokens são definidos em CSS, via
   <Swatch name="border" value="#e9e3db" />
 </Row>
 
-### Marca e acento
+### Brand and accent
 
 <Row>
   <Swatch name="primary" value="#2a2420" />
@@ -55,7 +55,7 @@ em branco e um único acento dourado. Os tokens são definidos em CSS, via
   <thead>
     <tr>
       <th>Token</th>
-      <th>Uso</th>
+      <th>Usage</th>
     </tr>
   </thead>
   <tbody>
@@ -63,70 +63,70 @@ em branco e um único acento dourado. Os tokens são definidos em CSS, via
       <td>
         <code>background</code>
       </td>
-      <td>Fundo das páginas</td>
+      <td>Page background</td>
     </tr>
     <tr>
       <td>
         <code>surface</code>
       </td>
-      <td>Fundo de cards e painéis</td>
+      <td>Background of cards and panels</td>
     </tr>
     <tr>
       <td>
         <code>foreground</code>
       </td>
-      <td>Texto principal</td>
+      <td>Primary text</td>
     </tr>
     <tr>
       <td>
         <code>muted</code>
       </td>
-      <td>Texto secundário, placeholders</td>
+      <td>Secondary text, placeholders</td>
     </tr>
     <tr>
       <td>
         <code>border</code>
       </td>
-      <td>Bordas suaves</td>
+      <td>Soft borders</td>
     </tr>
     <tr>
       <td>
         <code>primary</code>
       </td>
-      <td>Botões e CTAs principais</td>
+      <td>Primary buttons and CTAs</td>
     </tr>
     <tr>
       <td>
         <code>primary-foreground</code>
       </td>
       <td>
-        Texto sobre <code>primary</code>
+        Text on top of <code>primary</code>
       </td>
     </tr>
     <tr>
       <td>
         <code>accent</code>
       </td>
-      <td>Destaques sutis (dourado)</td>
+      <td>Subtle highlights (gold)</td>
     </tr>
   </tbody>
 </table>
 
-## Tipografia
+## Typography
 
 <p style={{ fontFamily: "Georgia, 'Times New Roman', serif", fontSize: 36 }}>
-  Lamora — perfumaria
+  Lamora — perfumery
 </p>
 <p style={{ fontSize: 16 }}>
-  O corpo de texto usa uma fonte sans-serif limpa para boa legibilidade.
+  The body text uses a clean sans-serif font for good readability.
 </p>
 
 <table>
   <thead>
     <tr>
       <th>Token</th>
-      <th>Família</th>
-      <th>Uso</th>
+      <th>Family</th>
+      <th>Usage</th>
     </tr>
   </thead>
   <tbody>
@@ -134,31 +134,82 @@ em branco e um único acento dourado. Os tokens são definidos em CSS, via
       <td>
         <code>--font-sans</code>
       </td>
-      <td>Geist + fallbacks de sistema</td>
-      <td>Corpo de texto, interface</td>
+      <td>Geist + system fallbacks</td>
+      <td>Body text, interface</td>
     </tr>
     <tr>
       <td>
         <code>--font-serif</code>
       </td>
       <td>Georgia, Times New Roman, serif</td>
-      <td>Títulos e destaques</td>
+      <td>Headings and highlights</td>
     </tr>
   </tbody>
 </table>
 
-## Como usar
+## Usage
 
-Os tokens viram utilitários do Tailwind automaticamente. Use as classes em vez
-de valores fixos:
+The tokens automatically become Tailwind utilities. Use the classes instead of
+hard-coded values:
 
 ```tsx
 <div className="bg-surface text-foreground border-border border">
-  <h2 className="text-foreground font-serif">Título</h2>
-  <p className="text-muted">Descrição secundária.</p>
-  <button className="bg-primary text-primary-foreground">Comprar</button>
+  <h2 className="text-foreground font-serif">Title</h2>
+  <p className="text-muted">Secondary description.</p>
+  <button className="bg-primary text-primary-foreground">Buy</button>
 </div>
 ```
 
-Para classes condicionais, sempre use o utilitário `cn()` de
-`shared/lib/utils.ts` — nunca concatene strings de classe na mão.
+For conditional class merging during composition, use the `cn()` utility from
+`shared/lib/utils.ts` — never concatenate class strings by hand.
+
+## Component variants with `tailwind-variants`
+
+The primitives in `shared/components/ui/` do **not** assemble `className` by
+hand nor stack `cn()` calls. Each component's styling is declared with
+[`tailwind-variants`](https://www.tailwind-variants.org/) (`tv`), which gathers
+in one place the base classes, the variations (`variant`, `size`, …) and their
+defaults.
+
+```tsx
+import type { ButtonHTMLAttributes } from "react";
+import { tv, type VariantProps } from "tailwind-variants";
+
+const button = tv({
+  base: "inline-flex items-center justify-center rounded-full font-medium",
+  variants: {
+    variant: {
+      primary: "bg-primary text-primary-foreground hover:bg-primary/90",
+      ghost: "text-foreground hover:bg-foreground/5",
+    },
+    size: { sm: "h-9 px-3 text-sm", md: "h-11 px-5 text-sm" },
+  },
+  defaultVariants: { variant: "primary", size: "md" },
+});
+
+// The variant props come from tv itself — no duplicated type union.
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
+  VariantProps<typeof button>;
+
+export function Button({ variant, size, className, ...props }: ButtonProps) {
+  // Base + variant + the consumer's className, conflicts already resolved.
+  return <button className={button({ variant, size, className })} {...props} />;
+}
+```
+
+Rules:
+
+1. **One `tv()` definition per component**, right after the imports. Components
+   without variations also use `tv()` — with just `base` — to keep the pattern.
+2. **The types come from `tv`.** Derive the variant props with
+   `VariantProps<typeof …>`; never re-declare the variant union by hand.
+3. **Multiple styled nodes? Use `slots`.** Components with more than one styled
+   element (such as `Modal` and `Drawer`) declare one slot per node, instead of
+   several loose `tv()` definitions.
+4. **`tv()` for the component, `cn()` for the rest.** `tv()` defines the
+   styling API of a primitive; `cn()` remains the tool for one-off conditional
+   merging when composing features.
+
+`tailwind-variants` resolves class conflicts internally (via `tailwind-merge`),
+so passing `className` in the call — `button({ className })` — overrides the
+base safely.

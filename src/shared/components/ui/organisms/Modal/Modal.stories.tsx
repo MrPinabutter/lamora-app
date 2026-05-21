@@ -1,10 +1,10 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { Button } from "../Button";
+import { Button } from "../../atoms/Button/Button";
 import { Modal } from "./Modal";
 
 const meta = {
-  title: "UI/Modal",
+  title: "Organisms/Modal",
   component: Modal,
   tags: ["autodocs"],
   parameters: { layout: "centered" },

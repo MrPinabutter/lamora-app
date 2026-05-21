@@ -1,0 +1,83 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Documentation/Introduction" />
+
+# Lamora
+
+**Lamora** is a perfumery e-commerce — perfumes, moisturizers, exfoliants and
+skin care — with a minimalist curation. This documentation gathers everything
+you need to understand, run and contribute to the project.
+
+## What's in the MVP
+
+The first release focuses on the essentials to validate the business:
+
+- **Landing page** — brand identity, best sellers, partner brands and
+  testimonials.
+- **Catalog** — listing with filters (category, brand, price range), sorting
+  and a product detail page with the olfactory pyramid.
+- **Cart** — off-canvas sidebar with checkout via **WhatsApp** (no payment
+  checkout in the MVP).
+- **User accounts** — sign-up with LGPD consent, login, profile and account
+  deletion with anonymization.
+- **Admin panel** — product CRUD, user management and a dashboard of conversion
+  metrics.
+
+> Integrated payment, reviews and wishlist are deferred to **v2** — the
+> feature-first structure already accommodates those domains without a rewrite.
+
+## Stack
+
+<table>
+  <thead>
+    <tr>
+      <th>Layer</th>
+      <th>Technology</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Framework</td>
+      <td>Next.js 16 (App Router, Server Components)</td>
+    </tr>
+    <tr>
+      <td>Language</td>
+      <td>
+        TypeScript (<code>strict</code>)
+      </td>
+    </tr>
+    <tr>
+      <td>State</td>
+      <td>Zustand 5</td>
+    </tr>
+    <tr>
+      <td>Data</td>
+      <td>PostgreSQL 16 + Prisma 6</td>
+    </tr>
+    <tr>
+      <td>Forms</td>
+      <td>React Hook Form 7 + Zod 3</td>
+    </tr>
+    <tr>
+      <td>Styling</td>
+      <td>
+        Tailwind CSS 4 (<code>@theme</code>)
+      </td>
+    </tr>
+    <tr>
+      <td>UI Docs</td>
+      <td>Storybook 10</td>
+    </tr>
+  </tbody>
+</table>
+
+## How to navigate this documentation
+
+- **Getting Started** — install dependencies, bring up the database and run the
+  project.
+- **Architecture** — the feature-first principles and the folder organization.
+- **Design Tokens** — the brand palette and typography.
+- **Components** — the rules for writing clean components and their stories.
+
+The generic UI components are cataloged in the **Atoms**, **Molecules** and
+**Organisms** sections of the sidebar, each one with interactive examples.
