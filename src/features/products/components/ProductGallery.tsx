@@ -20,7 +20,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
 
   if (!active) {
     return (
-      <div className="bg-surface flex aspect-[4/5] items-center justify-center rounded-lg">
+      <div className="bg-surface flex aspect-[4/5] items-center justify-center rounded-md">
         <Text variant="body" tone="muted">
           Sem imagem
         </Text>
@@ -29,8 +29,8 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
   }
 
   return (
-    <div className="space-y-3">
-      <div className="bg-surface relative aspect-[4/5] overflow-hidden rounded-lg">
+    <div className="space-y-4">
+      <div className="bg-surface relative aspect-[4/5] overflow-hidden rounded-md">
         <Image
           src={active.url}
           alt={productName}
@@ -41,7 +41,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
         />
       </div>
       {sorted.length > 1 ? (
-        <ul className="grid grid-cols-4 gap-2">
+        <ul className="grid grid-cols-4 gap-3">
           {sorted.map((image) => (
             <li key={image.id}>
               <button
@@ -50,10 +50,10 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
                 aria-label={`Ver imagem ${image.position + 1}`}
                 aria-current={image.id === active.id}
                 className={cn(
-                  "bg-surface focus-visible:ring-primary relative block aspect-square w-full overflow-hidden rounded-md focus-visible:ring-2 focus-visible:outline-none",
+                  "bg-surface focus-visible:ring-primary relative block aspect-square w-full overflow-hidden rounded-sm transition-opacity focus-visible:ring-2 focus-visible:outline-none",
                   image.id === active.id
-                    ? "ring-primary ring-2"
-                    : "ring-border ring-1",
+                    ? "ring-foreground ring-1 ring-offset-2"
+                    : "opacity-70 hover:opacity-100",
                 )}
               >
                 <Image

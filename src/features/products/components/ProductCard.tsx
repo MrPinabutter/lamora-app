@@ -16,16 +16,16 @@ export function ProductCard({ product }: ProductCardProps) {
     <article className="group">
       <Link
         href={`/produtos/${product.slug}`}
-        className="focus-visible:ring-primary block rounded-lg focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+        className="focus-visible:ring-primary block rounded-lg focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none"
       >
-        <div className="bg-surface relative aspect-[4/5] overflow-hidden rounded-lg">
+        <div className="bg-surface relative aspect-[4/5] overflow-hidden rounded-md">
           {primaryImage ? (
             <Image
               src={primaryImage.url}
               alt={product.name}
               fill
               sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
             />
           ) : (
             <Text
@@ -37,13 +37,25 @@ export function ProductCard({ product }: ProductCardProps) {
             </Text>
           )}
         </div>
-        <div className="mt-3 space-y-1">
+        <div className="mt-5 space-y-2">
           <Text variant="eyebrow">{product.brand}</Text>
-          <Text variant="h3">{product.name}</Text>
-          <Text variant="caption" as="p" className="line-clamp-2 leading-snug">
-            {product.shortDesc}
+          <Text
+            variant="h3"
+            as="h3"
+            className="font-serif text-[15px] leading-snug font-normal tracking-tight"
+          >
+            {product.name}
           </Text>
-          <Text variant="body" className="pt-1 font-semibold">
+          {product.shortDesc ? (
+            <Text
+              variant="caption"
+              as="p"
+              className="line-clamp-2 leading-snug"
+            >
+              {product.shortDesc}
+            </Text>
+          ) : null}
+          <Text variant="body" tone="muted" className="pt-1 text-[13px]">
             {formatBRL(product.price)}
           </Text>
         </div>

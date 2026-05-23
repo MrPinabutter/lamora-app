@@ -52,8 +52,8 @@ export default async function ProductDetailPage({
   const brandHref = `/produtos?brand=${encodeURIComponent(product.brand)}`;
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-6 pt-8 pb-20">
-      <nav className="mb-10">
+    <main className="mx-auto w-full max-w-6xl px-6 pt-10 pb-24 lg:pt-14 lg:pb-32">
+      <nav className="mb-12 lg:mb-16">
         <Link
           href="/produtos"
           className="text-muted hover:text-foreground focus-visible:ring-primary inline-flex items-center gap-2 rounded-sm py-1 text-[11px] font-medium tracking-[0.14em] uppercase transition-colors focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none"
@@ -63,12 +63,12 @@ export default async function ProductDetailPage({
         </Link>
       </nav>
 
-      <div className="grid gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
+      <div className="grid gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-20">
         <ProductGallery images={product.images} productName={product.name} />
 
-        <div className="space-y-8 lg:sticky lg:top-24 lg:self-start">
-          <header className="space-y-3">
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+        <div className="space-y-10 lg:sticky lg:top-28 lg:self-start">
+          <header className="space-y-4">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
               <Link
                 href={brandHref}
                 className="hover:text-foreground focus-visible:ring-primary rounded-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none"
@@ -77,23 +77,30 @@ export default async function ProductDetailPage({
                   {product.brand}
                 </Text>
               </Link>
-              <Text variant="eyebrow" as="span" aria-hidden>
-                ·
-              </Text>
+              <span aria-hidden className="bg-border h-px w-4" />
               <Text variant="eyebrow" as="span">
                 {CATEGORY_LABELS[product.category]}
               </Text>
             </div>
-            <Text variant="h1">{product.name}</Text>
+            <Text
+              variant="h1"
+              className="text-3xl leading-[1.1] lg:text-[2.25rem]"
+            >
+              {product.name}
+            </Text>
             {product.shortDesc ? (
-              <Text variant="body" tone="muted" className="max-w-prose">
+              <Text
+                variant="body"
+                tone="muted"
+                className="max-w-prose text-base leading-relaxed"
+              >
                 {product.shortDesc}
               </Text>
             ) : null}
           </header>
 
-          <div className="border-border flex items-baseline justify-between gap-4 border-y py-5">
-            <Text variant="lead" as="p" className="font-semibold">
+          <div className="border-border flex items-baseline justify-between gap-4 border-t pt-6">
+            <Text variant="lead" as="p" className="font-serif text-2xl">
               {formatBRL(product.price)}
             </Text>
             {stock ? (
@@ -111,18 +118,22 @@ export default async function ProductDetailPage({
           </div>
 
           {product.fullDesc ? (
-            <section className="space-y-3">
-              <Text variant="h3" as="h2">
+            <section className="border-border space-y-4 border-t pt-10">
+              <Text variant="eyebrow" as="h2">
                 Sobre a fragrância
               </Text>
-              <Text variant="body" tone="muted" className="max-w-prose">
+              <Text
+                variant="body"
+                tone="muted"
+                className="max-w-prose text-base leading-relaxed"
+              >
                 {product.fullDesc}
               </Text>
             </section>
           ) : null}
 
           {isPerfume && product.olfactory.length > 0 ? (
-            <div className="border-border border-t pt-8">
+            <div className="border-border border-t pt-10">
               <OlfactoryPyramid notes={product.olfactory} />
             </div>
           ) : null}

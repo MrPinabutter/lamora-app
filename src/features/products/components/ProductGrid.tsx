@@ -1,3 +1,4 @@
+import { Text } from "@/shared/components/atoms/Text";
 import { ProductCard } from "./ProductCard";
 import type { Product } from "../types/product.types";
 
@@ -8,14 +9,18 @@ interface ProductGridProps {
 export function ProductGrid({ products }: ProductGridProps) {
   if (products.length === 0) {
     return (
-      <p className="text-muted py-20 text-center text-sm">
-        Nenhum produto encontrado com os filtros selecionados.
-      </p>
+      <div className="flex flex-col items-center gap-3 py-24 text-center">
+        <Text variant="eyebrow">Nenhum resultado</Text>
+        <Text variant="body" tone="muted" className="max-w-xs">
+          Nenhum produto corresponde aos filtros selecionados. Tente ajustar a
+          categoria ou a faixa de preço.
+        </Text>
+      </div>
     );
   }
 
   return (
-    <ul className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">
+    <ul className="grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 lg:grid-cols-4">
       {products.map((product) => (
         <li key={product.id}>
           <ProductCard product={product} />

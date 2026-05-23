@@ -14,21 +14,25 @@ export function OlfactoryPyramid({ notes }: OlfactoryPyramidProps) {
   if (notes.length === 0) return null;
 
   return (
-    <section aria-labelledby="olfactory-title" className="space-y-4">
-      <Text variant="h2" id="olfactory-title">
+    <section aria-labelledby="olfactory-title" className="space-y-6">
+      <Text variant="eyebrow" id="olfactory-title" as="h2">
         Pirâmide olfativa
       </Text>
-      <div className="space-y-5">
+      <div className="space-y-8">
         {TIER_ORDER.map((tier) => {
           const tierNotes = notes.filter((note) => note.tier === tier);
           if (tierNotes.length === 0) return null;
 
           return (
-            <div key={tier} className="space-y-2">
-              <Text variant="eyebrow" as="h3">
+            <div key={tier} className="space-y-3">
+              <Text
+                variant="caption"
+                as="h3"
+                className="text-foreground font-medium"
+              >
                 {NOTE_TIER_LABELS[tier]}
               </Text>
-              <ul className="space-y-2">
+              <ul className="space-y-2.5">
                 {tierNotes.map((note) => (
                   <li
                     key={note.id}
@@ -45,7 +49,7 @@ export function OlfactoryPyramid({ notes }: OlfactoryPyramidProps) {
                         <span
                           key={level}
                           className={cn(
-                            "h-1.5 w-5 rounded-full",
+                            "h-1 w-4 rounded-full",
                             level <= note.intensity
                               ? "bg-accent"
                               : "bg-border",

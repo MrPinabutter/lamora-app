@@ -61,77 +61,79 @@ export function ProductFilters({ brands }: ProductFiltersProps) {
   ].join("|");
 
   return (
-    <form
-      key={formKey}
-      onSubmit={handleSubmit}
-      className="border-border space-y-5 rounded-lg border p-5"
-    >
-      <Text variant="h3">Filtros</Text>
-
-      <div>
-        <label htmlFor="filter-category" className={LABEL_CLASS}>
-          Categoria
-        </label>
-        <select
-          id="filter-category"
-          name="category"
-          defaultValue={filters.category ?? ""}
-          className={FIELD_CLASS}
-        >
-          <option value="">Todas</option>
-          {CATEGORY_ENTRIES.map(([value, label]) => (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          ))}
-        </select>
+    <form key={formKey} onSubmit={handleSubmit} className="space-y-8">
+      <div className="border-border space-y-1 border-t pt-5">
+        <Text variant="eyebrow">Filtros</Text>
       </div>
 
-      <div>
-        <label htmlFor="filter-brand" className={LABEL_CLASS}>
-          Marca
-        </label>
-        <select
-          id="filter-brand"
-          name="brand"
-          defaultValue={filters.brand ?? ""}
-          className={FIELD_CLASS}
-        >
-          <option value="">Todas</option>
-          {brands.map((brand) => (
-            <option key={brand} value={brand}>
-              {brand}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <fieldset>
-        <legend className={LABEL_CLASS}>Faixa de preço (R$)</legend>
-        <div className="flex items-center gap-2">
-          <Input
-            type="number"
-            name="minPrice"
-            min={0}
-            step="0.01"
-            placeholder="Mín."
-            defaultValue={filters.minPrice ?? ""}
-            aria-label="Preço mínimo"
-          />
-          <span className="text-muted text-sm">–</span>
-          <Input
-            type="number"
-            name="maxPrice"
-            min={0}
-            step="0.01"
-            placeholder="Máx."
-            defaultValue={filters.maxPrice ?? ""}
-            aria-label="Preço máximo"
-          />
+      <div className="space-y-6">
+        <div>
+          <label htmlFor="filter-category" className={LABEL_CLASS}>
+            Categoria
+          </label>
+          <select
+            id="filter-category"
+            name="category"
+            defaultValue={filters.category ?? ""}
+            className={FIELD_CLASS}
+          >
+            <option value="">Todas</option>
+            {CATEGORY_ENTRIES.map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
         </div>
-      </fieldset>
 
-      <div className="flex flex-col gap-2">
+        <div>
+          <label htmlFor="filter-brand" className={LABEL_CLASS}>
+            Marca
+          </label>
+          <select
+            id="filter-brand"
+            name="brand"
+            defaultValue={filters.brand ?? ""}
+            className={FIELD_CLASS}
+          >
+            <option value="">Todas</option>
+            {brands.map((brand) => (
+              <option key={brand} value={brand}>
+                {brand}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <fieldset>
+          <legend className={LABEL_CLASS}>Faixa de preço (R$)</legend>
+          <div className="flex items-center gap-2">
+            <Input
+              type="number"
+              name="minPrice"
+              min={0}
+              step="0.01"
+              placeholder="Mín."
+              defaultValue={filters.minPrice ?? ""}
+              aria-label="Preço mínimo"
+            />
+            <span className="text-muted text-sm" aria-hidden>
+              –
+            </span>
+            <Input
+              type="number"
+              name="maxPrice"
+              min={0}
+              step="0.01"
+              placeholder="Máx."
+              defaultValue={filters.maxPrice ?? ""}
+              aria-label="Preço máximo"
+            />
+          </div>
+        </fieldset>
+      </div>
+
+      <div className="flex flex-col gap-2 pt-2">
         <Button type="submit" size="sm">
           Aplicar filtros
         </Button>

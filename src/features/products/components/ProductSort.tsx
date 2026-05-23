@@ -15,12 +15,14 @@ export function ProductSort() {
   };
 
   return (
-    <label className="flex items-center gap-2 text-sm">
-      <span className="text-muted whitespace-nowrap">Ordenar por</span>
+    <label className="flex items-center gap-3">
+      <span className="text-muted text-[11px] font-medium tracking-[0.14em] whitespace-nowrap uppercase">
+        Ordenar
+      </span>
       <select
         value={filters.sort}
         onChange={handleChange}
-        className="border-border bg-surface text-foreground focus-visible:ring-primary h-9 rounded-md border px-2 text-sm focus-visible:ring-2 focus-visible:outline-none"
+        className="border-border bg-transparent text-foreground focus-visible:ring-primary h-9 rounded-md border px-3 text-sm focus-visible:ring-2 focus-visible:outline-none"
       >
         {SORT_ENTRIES.map(([value, label]) => (
           <option key={value} value={value}>
