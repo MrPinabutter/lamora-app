@@ -2,7 +2,7 @@ import type { ButtonHTMLAttributes } from "react";
 import { tv, type VariantProps } from "tailwind-variants";
 
 const button = tv({
-  base: "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-colors focus-visible:ring-primary focus-visible:ring-offset-background focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
+  base: "inline-flex items-center justify-center gap-2 cursor-pointer rounded-full font-medium transition-colors focus-visible:ring-primary focus-visible:ring-offset-background focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
   variants: {
     variant: {
       primary: "bg-primary text-primary-foreground hover:bg-primary/90",
