@@ -41,8 +41,7 @@ const eslintConfig = defineConfig([
             {
               from: { type: "feature" },
               allow: [
-                { to: { type: ["shared", "store"] } },
-                // Uma feature só pode importar a si mesma, nunca outra feature.
+                { to: { type: ["shared", "store", "server"] } },
                 {
                   to: {
                     type: "feature",

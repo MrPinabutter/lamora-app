@@ -1,5 +1,6 @@
 "use client";
 
+import { X } from "lucide-react";
 import { useRef, type MouseEvent, type ReactNode } from "react";
 import { tv } from "tailwind-variants";
 import { useDialog } from "@/shared/hooks/useDialog";
@@ -12,7 +13,9 @@ const drawer = tv({
     header:
       "border-border flex items-center justify-between border-b px-5 py-4",
     title: "font-serif text-lg",
-    closeButton: "text-muted hover:text-foreground text-lg",
+    closeButton:
+      "text-muted hover:text-foreground inline-flex size-8 items-center justify-center rounded-full",
+    closeIcon: "size-4",
     content: "flex-1 overflow-y-auto px-5 py-4",
   },
 });
@@ -50,7 +53,7 @@ export function Drawer({ open, onClose, title, children }: DrawerProps) {
             aria-label="Fechar"
             className={styles.closeButton()}
           >
-            ✕
+            <X className={styles.closeIcon()} aria-hidden />
           </button>
         </header>
         <div className={styles.content()}>{children}</div>

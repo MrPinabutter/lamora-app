@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function HomePage() {
   return (
     <main className="flex flex-1 flex-col items-center justify-center gap-3 px-6 text-center">
@@ -7,6 +9,12 @@ export default function HomePage() {
       <p className="text-muted max-w-sm text-sm">
         Perfumaria em construção. A vitrine chega em breve.
       </p>
+      <Link
+        href="/produtos"
+        className="text-accent text-sm font-medium hover:underline"
+      >
+        Ver produtos
+      </Link>
     </main>
   );
 }

@@ -57,6 +57,35 @@ Images have `alt`. Modals and the off-canvas cart trap focus and close on
 `Esc`. Prefer semantic elements (`<button>`, `<nav>`, `<article>`) over a
 `<div>` with `onClick`.
 
+## Icons
+
+[`lucide-react`](https://lucide.dev) is the **default and only** icon library
+in the project. Do not introduce other icon packs (`react-icons`,
+`@heroicons/react`, `@radix-ui/react-icons`, …) and do not hand-write inline
+`<svg>` markup or use glyph characters (`✕`, `←`, `→`, `★`) as icons. Browse
+the catalog at [lucide.dev/icons](https://lucide.dev/icons).
+
+```tsx
+import { X, ArrowLeft, Loader2 } from "lucide-react";
+
+<button aria-label="Fechar">
+  <X className="size-4" aria-hidden />
+</button>;
+```
+
+Rules:
+
+1. **Import named icons** from `lucide-react` — never the default export, never
+   the dynamic loader.
+2. **Size with Tailwind**, not the `size` prop: `className="size-4"` (or
+   `size-5`, `size-6`). Keeps icons aligned with the spacing scale.
+3. **Color inherits from `currentColor`** — set the surrounding text color
+   (`text-muted`, `text-foreground`) and let the icon follow.
+4. **Decorative icons get `aria-hidden`**; the surrounding control carries the
+   label. Icons that **are** the label need an `aria-label` on the parent
+   (`<button aria-label="Fechar"><X aria-hidden /></button>`).
+5. **Never wrap an icon in a custom component** just to rename it.
+
 ## Atomic Design
 
 The primitives in `src/shared/components/ui/` are organized by the **Atomic
