@@ -3,6 +3,7 @@
 import type { FormEvent } from "react";
 import { Button } from "@/shared/components/atoms/Button";
 import { Input } from "@/shared/components/atoms/Input";
+import { Text } from "@/shared/components/atoms/Text";
 import { CATEGORY_LABELS } from "@/shared/lib/constants";
 import { useProductFilters } from "../hooks/useProductFilters";
 import type { Category } from "../types/product.types";
@@ -65,7 +66,7 @@ export function ProductFilters({ brands }: ProductFiltersProps) {
       onSubmit={handleSubmit}
       className="border-border space-y-5 rounded-lg border p-5"
     >
-      <p className="font-medium">Filtros</p>
+      <Text variant="h3">Filtros</Text>
 
       <div>
         <label htmlFor="filter-category" className={LABEL_CLASS}>

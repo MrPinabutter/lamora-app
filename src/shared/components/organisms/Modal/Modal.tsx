@@ -3,6 +3,7 @@
 import { X } from "lucide-react";
 import { useRef, type MouseEvent, type ReactNode } from "react";
 import { tv } from "tailwind-variants";
+import { Text } from "@/shared/components/atoms/Text";
 import { useDialog } from "@/shared/hooks/useDialog";
 
 const modal = tv({
@@ -12,7 +13,7 @@ const modal = tv({
     closeButton:
       "text-muted hover:text-foreground absolute top-4 right-4 inline-flex size-8 items-center justify-center rounded-full",
     closeIcon: "size-4",
-    title: "text-foreground mb-4 pr-8 font-serif text-xl",
+    title: "mb-4 pr-8",
   },
 });
 
@@ -48,7 +49,11 @@ export function Modal({ open, onClose, title, children }: ModalProps) {
       >
         <X className={styles.closeIcon()} aria-hidden />
       </button>
-      {title ? <h2 className={styles.title()}>{title}</h2> : null}
+      {title ? (
+        <Text variant="h2" as="h2" className={styles.title()}>
+          {title}
+        </Text>
+      ) : null}
       {children}
     </dialog>
   );

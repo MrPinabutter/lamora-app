@@ -12,6 +12,7 @@ import {
   getProducts,
 } from "@/features/products/services/product.service";
 import type { ProductFilters as ProductFiltersValue } from "@/features/products/types/product.types";
+import { Text } from "@/shared/components/atoms/Text";
 
 export const metadata: Metadata = {
   title: "Produtos — Lamora",
@@ -36,11 +37,11 @@ export default async function ProductsPage({
 
   return (
     <main className="mx-auto w-full max-w-6xl px-6 py-10">
-      <header className="mb-8 space-y-1">
-        <h1 className="font-serif text-3xl tracking-tight">Produtos</h1>
-        <p className="text-muted text-sm">
+      <header className="mb-10 space-y-2">
+        <Text variant="h1">Produtos</Text>
+        <Text variant="body" tone="muted">
           Nossa curadoria de perfumaria e cuidados com a pele.
-        </p>
+        </Text>
       </header>
 
       <div className="flex flex-col gap-8 lg:flex-row">

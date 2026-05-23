@@ -1,0 +1,239 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Documentation/Style Guide" />
+
+# Style Guide
+
+Lamora's visual voice follows the
+[**impeccable.style**](https://impeccable.style) discipline: hierarchy is
+built with **role, space and color** — never by reaching for a bigger font.
+When in doubt, strip a layer, reduce a size, add space.
+
+## The three rules everything else flows from
+
+1. **Whitespace is a feature.** Sections breathe at 48–80px on desktop;
+   product imagery is never crowded by adjacent content; body text never runs
+   to the viewport edge.
+2. **Restraint over scale.** Display text rarely exceeds 36px. Page H1 sits
+   around 24px. Body text stays at 14–16px with relaxed line-height. Weight,
+   tracking and color carry the hierarchy.
+3. **Tokens, not literals.** Color, spacing and typography come from
+   `@theme` tokens and the `Text` atom. No raw hex, no `text-3xl` sprinkled
+   into pages.
+
+## Type scale
+
+The `Text` atom (`@/shared/components/atoms/Text`) is the **only** way to
+render textual content in pages and feature components. It maps a semantic
+role to a calibrated size, weight, leading and tracking — and renders the
+appropriate HTML tag by default.
+
+<table>
+  <thead>
+    <tr>
+      <th>Variant</th>
+      <th>Size</th>
+      <th>Default tag</th>
+      <th>Use it for</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>display</code>
+      </td>
+      <td>36px / serif / tight</td>
+      <td>
+        <code>h1</code>
+      </td>
+      <td>Brand hero only — the landing page wordmark</td>
+    </tr>
+    <tr>
+      <td>
+        <code>h1</code>
+      </td>
+      <td>24px / serif</td>
+      <td>
+        <code>h1</code>
+      </td>
+      <td>Page-level heading (product detail, products listing)</td>
+    </tr>
+    <tr>
+      <td>
+        <code>h2</code>
+      </td>
+      <td>20px / serif</td>
+      <td>
+        <code>h2</code>
+      </td>
+      <td>Section heading inside a page</td>
+    </tr>
+    <tr>
+      <td>
+        <code>h3</code>
+      </td>
+      <td>14px / sans, medium</td>
+      <td>
+        <code>h3</code>
+      </td>
+      <td>Card title, sub-section heading — weight (not size) marks it</td>
+    </tr>
+    <tr>
+      <td>
+        <code>lead</code>
+      </td>
+      <td>16px / sans, relaxed</td>
+      <td>
+        <code>p</code>
+      </td>
+      <td>Intro paragraph just below an H1</td>
+    </tr>
+    <tr>
+      <td>
+        <code>body</code>
+      </td>
+      <td>14px / sans, relaxed</td>
+      <td>
+        <code>p</code>
+      </td>
+      <td>Default body copy</td>
+    </tr>
+    <tr>
+      <td>
+        <code>caption</code>
+      </td>
+      <td>12px / muted</td>
+      <td>
+        <code>span</code>
+      </td>
+      <td>Helper text, secondary metadata</td>
+    </tr>
+    <tr>
+      <td>
+        <code>eyebrow</code>
+      </td>
+      <td>11px / uppercase / wide tracking</td>
+      <td>
+        <code>p</code>
+      </td>
+      <td>Category, brand, section label above a heading</td>
+    </tr>
+  </tbody>
+</table>
+
+```tsx
+import { Text } from "@/shared/components/atoms/Text";
+
+<Text variant="eyebrow">Perfumaria</Text>
+<Text variant="h1">Notas de fundo</Text>
+<Text variant="body">Ambar e baunilha sobre uma base de sândalo.</Text>
+<Text variant="caption" as="span">{formatBRL(product.price)}</Text>
+```
+
+Overrides:
+
+- **`as`** — render a different HTML tag while keeping the variant's styling
+  (e.g. `<Text variant="h1" as="span">` inside a product card).
+- **`tone`** — `default`, `muted` or `accent`. Use sparingly; the variant
+  already chooses the right default.
+- **`className`** — escape hatch for one-off spacing or alignment. Never
+  override the variant's size/weight via `className` — change the variant
+  instead.
+
+## Typography rules
+
+- **Serif for headings, sans for everything else.** The serif (`font-serif`)
+  is Lamora's voice — restricted to `display`, `h1` and `h2`. Body, lead and
+  helper text live in the sans (`font-sans`).
+- **Never raise size to fake importance.** If a section looks weak, add
+  whitespace above it, promote the surrounding label to an `eyebrow`, or
+  contrast it against a muted neighbor — don't bump the variant.
+- **No italic-serif heroes.** Italics in display type read as the
+  AI-generated default; reserve italics for in-text emphasis, not headings.
+- **Eyebrows do the heavy lifting on labels.** Uppercase 11px with wide
+  tracking earns presence from the spacing of the letters, not their size.
+
+## Spacing rhythm
+
+The Tailwind spacing scale (`0.5/1/2/3/4/5/6/8/10/12/16/20`) is the only
+allowed vocabulary. Avoid arbitrary values like `mt-7` or `gap-[13px]`.
+
+<table>
+  <thead>
+    <tr>
+      <th>Context</th>
+      <th>Vertical rhythm</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Inside a paragraph block</td>
+      <td>
+        <code>space-y-2</code> / <code>space-y-3</code>
+      </td>
+    </tr>
+    <tr>
+      <td>Heading → supporting text</td>
+      <td>
+        <code>space-y-1</code> after an eyebrow, <code>space-y-3</code> after
+        an H1
+      </td>
+    </tr>
+    <tr>
+      <td>Between sections inside a page</td>
+      <td>
+        <code>space-y-10</code> / <code>space-y-12</code>
+      </td>
+    </tr>
+    <tr>
+      <td>Page top/bottom padding</td>
+      <td>
+        <code>py-10</code> on the main; never <code>py-0</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## Color usage
+
+Tokens are defined in `src/app/globals.css`. Components only reference them
+by name — `bg-surface`, `text-muted`, `border-border`, `text-accent`.
+
+- **`accent`** is a gilding, not a brand color. It marks the active state of
+  a control, a price call-out, the hover state of an inline link. Never tile
+  a whole panel in `bg-accent`.
+- **`muted`** carries secondary information: helper text, captions,
+  metadata. It is also the default tone for `caption` and `eyebrow`.
+- **`primary`** is reserved for the primary CTA (`Button variant="primary"`).
+  Don't repaint headings in `primary` to make them louder.
+
+## Component density
+
+- **One container per page.** `mx-auto w-full max-w-6xl px-6 py-10` is the
+  shell. Don't nest a second `max-w` inside without a clear reason.
+- **No cards inside cards.** A product card has a single bordered surface;
+  the olfactory pyramid lives inline on the page, not inside another card.
+- **Borders are soft and singular.** `border border-border` on a panel, never
+  combined with shadows for the same affordance.
+
+## Icons
+
+`lucide-react` is the only icon library — see the **Components → Icons**
+section. Icons are 16–20px, follow `currentColor`, and carry `aria-hidden`
+when paired with a text label.
+
+## Anti-patterns (refused on sight)
+
+These come straight from impeccable.style's catalog. If you find one in the
+codebase, replace it.
+
+- Purple gradients and gradient text
+- Italic-serif display heroes as the default voice
+- Side-stripe border cards, thick decorative borders, heavy drop shadows
+- Cards nested inside cards ("cardocalypse")
+- Low-contrast text on tinted panels — body text needs ≥ 4.5:1 against its
+  background
+- Emoji used as functional UI affordances (a close button, a back arrow)
+- Glassmorphism on non-overlapping surfaces
+- Reaching for `text-4xl`/`text-5xl` to make something feel important. The
+  `Text` atom owns the scale; use a heavier variant or more space instead.

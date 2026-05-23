@@ -1,3 +1,4 @@
+import { Text } from "@/shared/components/atoms/Text";
 import { NOTE_TIER_LABELS } from "@/shared/lib/constants";
 import { cn } from "@/shared/lib/utils";
 import type { NoteTier, OlfactoryNote } from "../types/product.types";
@@ -14,9 +15,9 @@ export function OlfactoryPyramid({ notes }: OlfactoryPyramidProps) {
 
   return (
     <section aria-labelledby="olfactory-title" className="space-y-4">
-      <h2 id="olfactory-title" className="font-serif text-xl">
+      <Text variant="h2" id="olfactory-title">
         Pirâmide olfativa
-      </h2>
+      </Text>
       <div className="space-y-5">
         {TIER_ORDER.map((tier) => {
           const tierNotes = notes.filter((note) => note.tier === tier);
@@ -24,16 +25,18 @@ export function OlfactoryPyramid({ notes }: OlfactoryPyramidProps) {
 
           return (
             <div key={tier} className="space-y-2">
-              <h3 className="text-muted text-xs tracking-wide uppercase">
+              <Text variant="eyebrow" as="h3">
                 {NOTE_TIER_LABELS[tier]}
-              </h3>
+              </Text>
               <ul className="space-y-2">
                 {tierNotes.map((note) => (
                   <li
                     key={note.id}
                     className="flex items-center justify-between gap-4"
                   >
-                    <span className="text-sm">{note.name}</span>
+                    <Text variant="body" as="span">
+                      {note.name}
+                    </Text>
                     <span
                       className="flex gap-1"
                       aria-label={`Intensidade ${note.intensity} de 5`}

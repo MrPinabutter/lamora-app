@@ -3,6 +3,7 @@
 import { X } from "lucide-react";
 import { useRef, type MouseEvent, type ReactNode } from "react";
 import { tv } from "tailwind-variants";
+import { Text } from "@/shared/components/atoms/Text";
 import { useDialog } from "@/shared/hooks/useDialog";
 
 const drawer = tv({
@@ -12,7 +13,6 @@ const drawer = tv({
     panel: "flex h-full flex-col",
     header:
       "border-border flex items-center justify-between border-b px-5 py-4",
-    title: "font-serif text-lg",
     closeButton:
       "text-muted hover:text-foreground inline-flex size-8 items-center justify-center rounded-full",
     closeIcon: "size-4",
@@ -46,7 +46,9 @@ export function Drawer({ open, onClose, title, children }: DrawerProps) {
     >
       <div className={styles.panel()}>
         <header className={styles.header()}>
-          <h2 className={styles.title()}>{title ?? ""}</h2>
+          <Text variant="h2" as="h2">
+            {title ?? ""}
+          </Text>
           <button
             type="button"
             onClick={onClose}

@@ -8,6 +8,7 @@ import {
   ProductShareButton,
 } from "@/features/products";
 import { getProductBySlug } from "@/features/products/services/product.service";
+import { Text } from "@/shared/components/atoms/Text";
 import { CATEGORY_LABELS } from "@/shared/lib/constants";
 import { formatBRL } from "@/shared/lib/utils";
 
@@ -29,6 +30,15 @@ export async function generateMetadata({
   };
 }
 
+function stockNote(stock: number): {
+  label: string;
+  tone: "muted" | "accent";
+} | null {
+  if (stock <= 0) return { label: "Esgotado", tone: "muted" };
+  if (stock < 5) return { label: `Últimas ${stock} unidades`, tone: "accent" };
+  return null;
+}
+
 export default async function ProductDetailPage({
   params,
 }: ProductDetailPageProps) {
@@ -38,45 +48,84 @@ export default async function ProductDetailPage({
   if (!product) notFound();
 
   const isPerfume = product.category === "PERFUME";
+  const stock = stockNote(product.stock);
+  const brandHref = `/produtos?brand=${encodeURIComponent(product.brand)}`;
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-6 py-10">
-      <nav className="mb-8 text-sm">
+    <main className="mx-auto w-full max-w-6xl px-6 pt-8 pb-20">
+      <nav className="mb-10">
         <Link
           href="/produtos"
-          className="text-muted hover:text-accent inline-flex items-center gap-1.5"
+          className="text-muted hover:text-foreground focus-visible:ring-primary inline-flex items-center gap-2 rounded-sm py-1 text-[11px] font-medium tracking-[0.14em] uppercase transition-colors focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none"
         >
-          <ArrowLeft className="size-4" aria-hidden />
+          <ArrowLeft className="size-3.5" aria-hidden />
           Voltar para produtos
         </Link>
       </nav>
 
-      <div className="grid gap-10 lg:grid-cols-2">
+      <div className="grid gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
         <ProductGallery images={product.images} productName={product.name} />
 
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <p className="text-muted text-xs tracking-wide uppercase">
-              {product.brand} · {CATEGORY_LABELS[product.category]}
-            </p>
-            <h1 className="font-serif text-3xl tracking-tight">
-              {product.name}
-            </h1>
-            <p className="text-2xl font-semibold">
+        <div className="space-y-8 lg:sticky lg:top-24 lg:self-start">
+          <header className="space-y-3">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+              <Link
+                href={brandHref}
+                className="hover:text-foreground focus-visible:ring-primary rounded-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none"
+              >
+                <Text variant="eyebrow" as="span">
+                  {product.brand}
+                </Text>
+              </Link>
+              <Text variant="eyebrow" as="span" aria-hidden>
+                ·
+              </Text>
+              <Text variant="eyebrow" as="span">
+                {CATEGORY_LABELS[product.category]}
+              </Text>
+            </div>
+            <Text variant="h1">{product.name}</Text>
+            {product.shortDesc ? (
+              <Text variant="body" tone="muted" className="max-w-prose">
+                {product.shortDesc}
+              </Text>
+            ) : null}
+          </header>
+
+          <div className="border-border flex items-baseline justify-between gap-4 border-y py-5">
+            <Text variant="lead" as="p" className="font-semibold">
               {formatBRL(product.price)}
-            </p>
+            </Text>
+            {stock ? (
+              <Text variant="caption" tone={stock.tone}>
+                {stock.label}
+              </Text>
+            ) : null}
           </div>
 
-          <p className="text-foreground/80 text-sm leading-relaxed">
-            {product.fullDesc}
-          </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <ProductShareButton
+              title={product.name}
+              text={`${product.name} — ${product.brand}`}
+            />
+          </div>
 
-          <ProductShareButton
-            title={product.name}
-            text={`${product.name} — ${product.brand}`}
-          />
+          {product.fullDesc ? (
+            <section className="space-y-3">
+              <Text variant="h3" as="h2">
+                Sobre a fragrância
+              </Text>
+              <Text variant="body" tone="muted" className="max-w-prose">
+                {product.fullDesc}
+              </Text>
+            </section>
+          ) : null}
 
-          {isPerfume ? <OlfactoryPyramid notes={product.olfactory} /> : null}
+          {isPerfume && product.olfactory.length > 0 ? (
+            <div className="border-border border-t pt-8">
+              <OlfactoryPyramid notes={product.olfactory} />
+            </div>
+          ) : null}
         </div>
       </div>
     </main>

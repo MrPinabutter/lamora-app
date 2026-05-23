@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { Text } from "@/shared/components/atoms/Text";
 import { cn } from "@/shared/lib/utils";
 import type { ProductImage } from "../types/product.types";
 
@@ -19,8 +20,10 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
 
   if (!active) {
     return (
-      <div className="bg-surface text-muted flex aspect-[4/5] items-center justify-center rounded-lg text-sm">
-        Sem imagem
+      <div className="bg-surface flex aspect-[4/5] items-center justify-center rounded-lg">
+        <Text variant="body" tone="muted">
+          Sem imagem
+        </Text>
       </div>
     );
   }

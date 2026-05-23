@@ -1,25 +1,24 @@
 import Link from "next/link";
+import { Text } from "@/shared/components/atoms/Text";
+import { SiteNav } from "./_components/SiteNav";
 
 export default function PublicLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
-      <header className="border-border bg-background/90 sticky top-0 z-40 border-b backdrop-blur">
+      <header className="border-border bg-background/85 sticky top-0 z-40 border-b backdrop-blur">
         <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-          <Link href="/" className="font-serif text-xl tracking-tight">
-            Lamora
+          <Link
+            href="/"
+            aria-label="Lamora — página inicial"
+            className="focus-visible:ring-primary rounded-sm focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none"
+          >
+            <Text variant="h2" as="span" className="tracking-tight">
+              Lamora
+            </Text>
           </Link>
-          <ul className="flex items-center gap-6 text-sm">
-            <li>
-              <Link
-                href="/produtos"
-                className="hover:text-accent transition-colors"
-              >
-                Produtos
-              </Link>
-            </li>
-          </ul>
+          <SiteNav />
         </nav>
       </header>
       {children}

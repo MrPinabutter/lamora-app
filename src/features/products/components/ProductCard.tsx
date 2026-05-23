@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Text } from "@/shared/components/atoms/Text";
 import { formatBRL } from "@/shared/lib/utils";
 import type { Product } from "../types/product.types";
 
@@ -27,24 +28,24 @@ export function ProductCard({ product }: ProductCardProps) {
               className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
-            <span className="text-muted flex h-full items-center justify-center text-xs">
+            <Text
+              variant="caption"
+              as="span"
+              className="flex h-full items-center justify-center"
+            >
               Sem imagem
-            </span>
+            </Text>
           )}
         </div>
         <div className="mt-3 space-y-1">
-          <p className="text-muted text-xs tracking-wide uppercase">
-            {product.brand}
-          </p>
-          <h3 className="text-foreground text-sm font-medium">
-            {product.name}
-          </h3>
-          <p className="text-muted line-clamp-2 text-xs leading-relaxed">
+          <Text variant="eyebrow">{product.brand}</Text>
+          <Text variant="h3">{product.name}</Text>
+          <Text variant="caption" as="p" className="line-clamp-2 leading-snug">
             {product.shortDesc}
-          </p>
-          <p className="text-foreground pt-1 text-sm font-semibold">
+          </Text>
+          <Text variant="body" className="pt-1 font-semibold">
             {formatBRL(product.price)}
-          </p>
+          </Text>
         </div>
       </Link>
     </article>
