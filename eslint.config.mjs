@@ -52,8 +52,12 @@ const eslintConfig = defineConfig([
             },
             { from: { type: "shared" }, allow: { to: { type: "shared" } } },
             {
+              // server/actions/ é a fronteira entre o HTTP e a camada de
+              // serviço das features (spec §5.4), por isso o servidor pode
+              // importar de features. server/db.ts e demais infra continuam
+              // sem dependência alguma de features.
               from: { type: "server" },
-              allow: { to: { type: ["shared", "server"] } },
+              allow: { to: { type: ["shared", "server", "feature"] } },
             },
             {
               from: { type: "store" },

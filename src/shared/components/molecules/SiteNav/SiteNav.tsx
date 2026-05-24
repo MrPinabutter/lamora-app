@@ -5,14 +5,21 @@ import { usePathname } from "next/navigation";
 import { Text } from "@/shared/components/atoms/Text";
 import { cn } from "@/shared/lib/utils";
 
-const NAV_LINKS = [{ href: "/produtos", label: "Produtos" }] as const;
+export interface SiteNavLink {
+  href: string;
+  label: string;
+}
 
-export function SiteNav() {
+interface SiteNavProps {
+  links: ReadonlyArray<SiteNavLink>;
+}
+
+export function SiteNav({ links }: SiteNavProps) {
   const pathname = usePathname();
 
   return (
     <ul className="flex items-center gap-8">
-      {NAV_LINKS.map(({ href, label }) => {
+      {links.map(({ href, label }) => {
         const active = pathname === href || pathname.startsWith(`${href}/`);
         return (
           <li key={href}>
@@ -26,9 +33,7 @@ export function SiteNav() {
                 as="span"
                 className={cn(
                   "transition-colors",
-                  active
-                    ? "text-foreground"
-                    : "group-hover:text-foreground",
+                  active ? "text-foreground" : "group-hover:text-foreground",
                 )}
               >
                 {label}

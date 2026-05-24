@@ -1,14 +1,20 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { Text } from "@/shared/components/atoms/Text";
 import { formatBRL } from "@/shared/lib/utils";
 import type { Product } from "../types/product.types";
 
 interface ProductCardProps {
   product: Product;
+  /**
+   * Ação inserida abaixo do card (ex.: `AddToCartButton`). Fica fora do
+   * `<Link>` para evitar elementos interativos aninhados.
+   */
+  action?: ReactNode;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, action }: ProductCardProps) {
   const primaryImage =
     product.images.find((image) => image.isPrimary) ?? product.images[0];
 
@@ -60,6 +66,7 @@ export function ProductCard({ product }: ProductCardProps) {
           </Text>
         </div>
       </Link>
+      {action ? <div className="mt-4">{action}</div> : null}
     </article>
   );
 }

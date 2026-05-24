@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { AddToCartButton } from "@/features/cart";
 import {
   ProductFilters,
   ProductGrid,
@@ -26,7 +27,27 @@ interface ProductsPageProps {
 
 async function ProductResults({ filters }: { filters: ProductFiltersValue }) {
   const products = await getProducts(filters);
-  return <ProductGrid products={products} />;
+  return (
+    <ProductGrid
+      products={products}
+      renderAction={(product) => {
+        const image =
+          product.images.find((img) => img.isPrimary) ?? product.images[0];
+        return (
+          <AddToCartButton
+            productId={product.id}
+            slug={product.slug}
+            name={product.name}
+            brand={product.brand}
+            price={product.price}
+            imageUrl={image?.url}
+            stock={product.stock}
+            className="w-full"
+          />
+        );
+      }}
+    />
+  );
 }
 
 export default async function ProductsPage({

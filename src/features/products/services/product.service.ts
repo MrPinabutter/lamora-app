@@ -107,3 +107,17 @@ export const getProductBrands = cache(async (): Promise<string[]> => {
 
   return rows.map((row) => row.brand);
 });
+
+// Sem dados de vendas no MVP: usamos os mais recentes como proxy.
+// Quando houver pedidos (v2), trocar por contagem de itens vendidos.
+export const getFeaturedProducts = cache(
+  async (limit = 4): Promise<Product[]> => {
+    const rows = await db.product.findMany({
+      take: limit,
+      orderBy: { createdAt: "desc" },
+      include: PRODUCT_INCLUDE,
+    });
+
+    return rows.map(toProduct);
+  },
+);

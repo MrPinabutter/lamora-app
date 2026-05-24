@@ -1,10 +1,18 @@
 import Link from "next/link";
+import { CartSidebar } from "@/features/cart";
 import { Text } from "@/shared/components/atoms/Text";
-import { SiteNav } from "./_components/SiteNav";
+import { SiteNav, type SiteNavLink } from "@/shared/components/molecules/SiteNav";
+import { CartButton } from "./_components/CartButton";
+
+const NAV_LINKS: ReadonlyArray<SiteNavLink> = [
+  { href: "/produtos", label: "Produtos" },
+];
 
 export default function PublicLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const storePhone = process.env.STORE_PHONE ?? "";
+
   return (
     <>
       <header className="border-border bg-background/85 sticky top-0 z-40 border-b backdrop-blur">
@@ -22,10 +30,14 @@ export default function PublicLayout({
               Lamora
             </Text>
           </Link>
-          <SiteNav />
+          <div className="flex items-center gap-8">
+            <SiteNav links={NAV_LINKS} />
+            <CartButton />
+          </div>
         </nav>
       </header>
       {children}
+      <CartSidebar storePhone={storePhone} />
     </>
   );
 }

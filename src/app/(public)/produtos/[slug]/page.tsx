@@ -2,6 +2,7 @@ import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { AddToCartButton } from "@/features/cart";
 import {
   OlfactoryPyramid,
   ProductGallery,
@@ -50,6 +51,8 @@ export default async function ProductDetailPage({
   const isPerfume = product.category === "PERFUME";
   const stock = stockNote(product.stock);
   const brandHref = `/produtos?brand=${encodeURIComponent(product.brand)}`;
+  const primaryImage =
+    product.images.find((img) => img.isPrimary) ?? product.images[0];
 
   return (
     <main className="mx-auto w-full max-w-6xl px-6 pt-10 pb-24 lg:pt-14 lg:pb-32">
@@ -111,6 +114,18 @@ export default async function ProductDetailPage({
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
+            <AddToCartButton
+              productId={product.id}
+              slug={product.slug}
+              name={product.name}
+              brand={product.brand}
+              price={product.price}
+              imageUrl={primaryImage?.url}
+              stock={product.stock}
+              variant="primary"
+              size="md"
+              label="Adicionar ao carrinho"
+            />
             <ProductShareButton
               title={product.name}
               text={`${product.name} — ${product.brand}`}

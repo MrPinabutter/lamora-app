@@ -1,0 +1,54 @@
+import { Text } from "@/shared/components/atoms/Text";
+
+export interface Testimonial {
+  quote: string;
+  author: string;
+  role: string;
+}
+
+interface TestimonialsProps {
+  eyebrow: string;
+  title: string;
+  testimonials: ReadonlyArray<Testimonial>;
+}
+
+export function Testimonials({
+  eyebrow,
+  title,
+  testimonials,
+}: TestimonialsProps) {
+  return (
+    <section>
+      <div className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
+        <header className="mb-14 max-w-md space-y-3 lg:mb-20">
+          <Text variant="eyebrow">{eyebrow}</Text>
+          <Text variant="h1" className="text-2xl lg:text-[1.75rem]">
+            {title}
+          </Text>
+        </header>
+        <ul className="grid gap-12 md:grid-cols-3 md:gap-10">
+          {testimonials.map((testimonial) => (
+            <li
+              key={testimonial.author}
+              className="border-border space-y-6 border-t pt-8"
+            >
+              <Text
+                variant="lead"
+                as="blockquote"
+                className="font-serif text-[1.0625rem] leading-relaxed text-balance"
+              >
+                “{testimonial.quote}”
+              </Text>
+              <footer className="space-y-1">
+                <Text variant="h3" as="p" className="text-[13px]">
+                  {testimonial.author}
+                </Text>
+                <Text variant="caption">{testimonial.role}</Text>
+              </footer>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
