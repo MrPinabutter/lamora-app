@@ -3,13 +3,18 @@ import { ProductGrid } from "@/features/products";
 import { getFeaturedProducts } from "@/features/products/services/product.service";
 import { FeaturedSection } from "@/shared/components/organisms/FeaturedSection";
 
-export async function FeaturedProducts() {
+interface FeaturedProductsProps {
+  index?: string;
+}
+
+export async function FeaturedProducts({ index }: FeaturedProductsProps = {}) {
   const products = await getFeaturedProducts(4);
 
   if (products.length === 0) return null;
 
   return (
     <FeaturedSection
+      index={index}
       eyebrow="Em destaque"
       title="Mais vendidos"
       viewAllHref="/produtos"

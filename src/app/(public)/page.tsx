@@ -2,6 +2,10 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { ProductGridSkeleton } from "@/features/products";
+import {
+  Disciplines,
+  type Discipline,
+} from "@/shared/components/organisms/Disciplines";
 import { Hero } from "@/shared/components/organisms/Hero";
 import {
   Testimonials,
@@ -9,6 +13,31 @@ import {
 } from "@/shared/components/organisms/Testimonials";
 import { FeaturedProducts } from "./_components/FeaturedProducts";
 import { PartnerBrands } from "./_components/PartnerBrands";
+
+const HERO_META = ["Est. 2026", "Brasil", "Curadoria independente"] as const;
+
+const DISCIPLINES: ReadonlyArray<Discipline> = [
+  {
+    label: "Perfumes",
+    description:
+      "Eaux de parfum e cologne com pirâmide olfativa completa — do topo ao fundo.",
+  },
+  {
+    label: "Hidratantes",
+    description:
+      "Cremes e loções para nutrir o corpo todos os dias, sem peso e sem perfume excessivo.",
+  },
+  {
+    label: "Esfoliantes",
+    description:
+      "Renovação delicada com texturas que cabem na rotina do banho.",
+  },
+  {
+    label: "Skin care",
+    description:
+      "Sérums, limpadores e tratamentos para o rosto — fórmulas honestas e direto ao ponto.",
+  },
+];
 
 const TESTIMONIALS: ReadonlyArray<Testimonial> = [
   {
@@ -33,11 +62,12 @@ const TESTIMONIALS: ReadonlyArray<Testimonial> = [
 
 export default function HomePage() {
   return (
-    <main className="flex flex-1 flex-col">
+    <main className="page-texture relative isolate flex flex-1 flex-col overflow-hidden">
       <Hero
         eyebrow="Perfumaria · curadoria"
         title="Fragrâncias e cuidados, escolhidos com calma."
         description="Uma seleção pensada para o seu ritmo. Crie sua conta para receber lançamentos em primeira mão e salvar suas favoritas."
+        meta={HERO_META}
         actions={
           <>
             <Link
@@ -56,6 +86,12 @@ export default function HomePage() {
           </>
         }
       />
+      <Disciplines
+        index="01"
+        eyebrow="Disciplinas"
+        title="O que cuidamos por aqui."
+        disciplines={DISCIPLINES}
+      />
       <Suspense
         fallback={
           <section className="border-border border-b">
@@ -65,10 +101,11 @@ export default function HomePage() {
           </section>
         }
       >
-        <FeaturedProducts />
+        <FeaturedProducts index="02" />
       </Suspense>
-      <PartnerBrands />
+      <PartnerBrands index="03" />
       <Testimonials
+        index="04"
         eyebrow="Quem usa, fala"
         title="Recados de quem nos acompanha."
         testimonials={TESTIMONIALS}

@@ -59,3 +59,21 @@ export const WithMultilineTitle: Story = {
     description: "Encontre o que combina com o seu ritmo.",
   },
 };
+
+export const WithMeta: Story = {
+  args: {
+    eyebrow: "Perfumaria · curadoria",
+    title: "Fragrâncias e cuidados, escolhidos com calma.",
+    description:
+      "Uma seleção pensada para o seu ritmo. Crie sua conta para receber lançamentos em primeira mão.",
+    meta: ["Est. 2026", "Brasil", "Curadoria independente"],
+    actions: (
+      <a
+        href="#"
+        className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-11 items-center justify-center rounded-full px-6 text-[12px] font-medium tracking-[0.18em] uppercase transition-colors"
+      >
+        Criar conta
+      </a>
+    ),
+  },
+};

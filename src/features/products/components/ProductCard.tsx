@@ -52,15 +52,13 @@ export function ProductCard({ product, action }: ProductCardProps) {
           >
             {product.name}
           </Text>
-          {product.shortDesc ? (
-            <Text
-              variant="caption"
-              as="p"
-              className="line-clamp-2 leading-snug"
-            >
-              {product.shortDesc}
-            </Text>
-          ) : null}
+          <Text
+            variant="caption"
+            as="p"
+            className="line-clamp-2 min-h-[2lh] leading-snug"
+          >
+            {product.shortDesc}
+          </Text>
           <Text variant="body" tone="muted" className="pt-1 text-[13px]">
             {formatBRL(product.price)}
           </Text>

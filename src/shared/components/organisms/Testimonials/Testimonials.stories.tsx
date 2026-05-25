@@ -48,3 +48,12 @@ export const Single: Story = {
     testimonials: [SAMPLE[0]!],
   },
 };
+
+export const WithIndex: Story = {
+  args: {
+    index: "04",
+    eyebrow: "Quem usa, fala",
+    title: "Recados de quem nos acompanha.",
+    testimonials: SAMPLE,
+  },
+};

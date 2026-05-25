@@ -37,3 +37,13 @@ export const WithoutViewAll: Story = {
     children: placeholder,
   },
 };
+
+export const WithIndex: Story = {
+  args: {
+    index: "02",
+    eyebrow: "Em destaque",
+    title: "Mais vendidos",
+    viewAllHref: "/produtos",
+    children: placeholder,
+  },
+};

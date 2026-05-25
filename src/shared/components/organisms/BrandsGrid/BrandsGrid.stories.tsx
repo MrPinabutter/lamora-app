@@ -38,3 +38,17 @@ export const Empty: Story = {
     brands: [],
   },
 };
+
+export const WithIndex: Story = {
+  args: {
+    index: "03",
+    eyebrow: "Marcas parceiras",
+    brands: [
+      "Maison Lumière",
+      "Atelier Côte",
+      "Botânica Pura",
+      "Maré Alta",
+      "Dermo Lab",
+    ],
+  },
+};

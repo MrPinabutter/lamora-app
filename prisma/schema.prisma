@@ -35,6 +35,9 @@ model User {
   birthDate   DateTime
   phone       String
   status      UserStatus @default(ACTIVE)
+  // Acesso ao painel administrativo (ver tarefa 07). Promoção manual via
+  // banco — não há UI para conceder o papel no MVP.
+  isAdmin     Boolean    @default(false)
   lgpdConsent Boolean    @default(false)
   consentAt   DateTime?
   createdAt   DateTime   @default(now())
