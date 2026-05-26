@@ -1,8 +1,12 @@
 import Link from "next/link";
 import { CartSidebar } from "@/features/cart";
 import { Text } from "@/shared/components/atoms/Text";
-import { SiteNav, type SiteNavLink } from "@/shared/components/molecules/SiteNav";
+import {
+  SiteNav,
+  type SiteNavLink,
+} from "@/shared/components/molecules/SiteNav";
 import { CartButton } from "./_components/CartButton";
+import { SiteFooter } from "./_components/SiteFooter";
 
 const NAV_LINKS: ReadonlyArray<SiteNavLink> = [
   { href: "/produtos", label: "Produtos" },
@@ -15,7 +19,7 @@ export default function PublicLayout({
 
   return (
     <>
-      <header className="border-border bg-background/85 sticky top-0 z-40 border-b backdrop-blur">
+      <header className="border-border-soft bg-background/85 sticky top-0 z-40 border-b backdrop-blur">
         <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6 lg:h-20">
           <Link
             href="/"
@@ -25,9 +29,14 @@ export default function PublicLayout({
             <Text
               variant="h2"
               as="span"
-              className="text-lg tracking-[0.32em] uppercase"
+              className="font-serif text-lg font-medium tracking-[0.32em] uppercase"
             >
-              Lamora
+              <img
+                src="logo.svg"
+                alt="Lamora"
+                width={130}
+                className="h-auto w-40"
+              />
             </Text>
           </Link>
           <div className="flex items-center gap-8">
@@ -36,7 +45,8 @@ export default function PublicLayout({
           </div>
         </nav>
       </header>
-      {children}
+      <div className="flex-1">{children}</div>
+      <SiteFooter />
       <CartSidebar storePhone={storePhone} />
     </>
   );

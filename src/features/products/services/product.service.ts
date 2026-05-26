@@ -121,3 +121,16 @@ export const getFeaturedProducts = cache(
     return rows.map(toProduct);
   },
 );
+
+// "Aroma do mês" da landing: o PERFUME mais recente do catálogo, com
+// pirâmide olfativa completa. Curadoria manual via reordenação no admin.
+export const getFeaturedFragrance = cache(
+  async (): Promise<Product | null> => {
+    const row = await db.product.findFirst({
+      where: { category: "PERFUME" },
+      orderBy: { createdAt: "desc" },
+      include: PRODUCT_INCLUDE,
+    });
+    return row ? toProduct(row) : null;
+  },
+);

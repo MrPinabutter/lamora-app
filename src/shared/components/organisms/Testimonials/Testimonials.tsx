@@ -21,39 +21,42 @@ export function Testimonials({
   index,
 }: TestimonialsProps) {
   return (
-    <section>
+    <section className="bg-background-2 border-border-soft border-t border-b">
       <div className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
-        <header className="mb-14 max-w-md space-y-3 lg:mb-20">
-          <div className="text-muted flex items-center gap-3 text-[11px] font-medium tracking-[0.14em] uppercase">
+        <header className="mb-12 max-w-md space-y-6 lg:mb-16">
+          <div className="text-muted flex items-center gap-3 text-[11px] font-medium tracking-[0.18em] uppercase">
             {index ? (
               <>
                 <span className="text-foreground tabular-nums">{index}</span>
-                <span aria-hidden className="bg-border h-px w-6" />
+                <span aria-hidden className="bg-muted-2 h-px w-9" />
               </>
             ) : null}
             <span>{eyebrow}</span>
           </div>
-          <Text variant="h1" className="text-2xl lg:text-[1.75rem]">
+          <Text
+            variant="h1"
+            className="font-serif text-3xl tracking-[-0.02em] lg:text-[2.875rem] lg:leading-[1.1]"
+          >
             {title}
           </Text>
         </header>
-        <ul className="grid gap-12 md:grid-cols-3 md:gap-10">
+        <ul className="border-border grid border-t md:grid-cols-3">
           {testimonials.map((testimonial, position) => (
             <li
               key={testimonial.author}
-              className="border-border space-y-6 border-t pt-8"
+              className="border-border space-y-10 p-10 md:border-r md:last:border-r-0"
             >
               <Text
                 variant="caption"
                 as="p"
-                className="tabular-nums"
+                className="text-muted text-[11px] tracking-[0.18em] tabular-nums uppercase"
               >
                 {String(position + 1).padStart(2, "0")}
               </Text>
               <Text
                 variant="lead"
                 as="blockquote"
-                className="font-serif text-[1.0625rem] leading-relaxed text-balance"
+                className="font-serif text-[1.15rem] leading-[1.5] italic text-balance"
               >
                 “{testimonial.quote}”
               </Text>

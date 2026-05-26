@@ -11,10 +11,15 @@ import {
   Testimonials,
   type Testimonial,
 } from "@/shared/components/organisms/Testimonials";
+import { Faq } from "./_components/Faq";
+import { FeaturedFragrance } from "./_components/FeaturedFragrance";
 import { FeaturedProducts } from "./_components/FeaturedProducts";
+import { Manifesto } from "./_components/Manifesto";
+import { NewsletterCTA } from "./_components/NewsletterCTA";
 import { PartnerBrands } from "./_components/PartnerBrands";
+import { RitualSteps } from "./_components/RitualSteps";
 
-const HERO_META = ["Est. 2026", "Brasil", "Curadoria independente"] as const;
+const HERO_META = ["Est. 2026", "Brasil", "Curadoria Independente"] as const;
 
 const DISCIPLINES: ReadonlyArray<Discipline> = [
   {
@@ -64,37 +69,49 @@ export default function HomePage() {
   return (
     <main className="page-texture relative isolate flex flex-1 flex-col overflow-hidden">
       <Hero
-        eyebrow="Perfumaria · curadoria"
-        title="Fragrâncias e cuidados, escolhidos com calma."
+        eyebrow="Perfumaria · Curadoria"
+        title={
+          <>
+            Fragrâncias e cuidados,
+            <br />
+            escolhidos com calma.
+          </>
+        }
         description="Uma seleção pensada para o seu ritmo. Crie sua conta para receber lançamentos em primeira mão e salvar suas favoritas."
         meta={HERO_META}
         actions={
           <>
             <Link
               href="/cadastro"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-primary focus-visible:ring-offset-background inline-flex h-11 items-center justify-center rounded-full px-6 text-[12px] font-medium tracking-[0.18em] uppercase transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+              className="bg-primary text-primary-foreground hover:bg-foreground focus-visible:ring-primary focus-visible:ring-offset-background inline-flex h-12 items-center justify-center rounded-full px-9 text-[12px] font-medium tracking-[0.18em] uppercase transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
             >
               Criar conta
             </Link>
             <Link
               href="/produtos"
-              className="text-foreground hover:text-accent focus-visible:ring-primary inline-flex items-center gap-2 rounded-sm py-1 text-[11px] font-medium tracking-[0.18em] uppercase transition-colors focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none"
+              className="text-foreground hover:text-accent focus-visible:ring-primary group inline-flex items-center gap-2 rounded-sm py-1 text-[12px] font-medium tracking-[0.18em] uppercase transition-colors focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none"
             >
-              Ver catálogo
-              <ArrowRight className="size-3.5" aria-hidden />
+              Ver Catálogo
+              <ArrowRight
+                className="size-3.5 transition-transform group-hover:translate-x-1"
+                aria-hidden
+              />
             </Link>
           </>
         }
+        scrollHint="Role para descobrir"
       />
+      <Manifesto />
       <Disciplines
         index="01"
         eyebrow="Disciplinas"
         title="O que cuidamos por aqui."
         disciplines={DISCIPLINES}
       />
+      <FeaturedFragrance />
       <Suspense
         fallback={
-          <section className="border-border border-b">
+          <section className="border-border-soft border-b">
             <div className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
               <ProductGridSkeleton />
             </div>
@@ -103,13 +120,16 @@ export default function HomePage() {
       >
         <FeaturedProducts index="02" />
       </Suspense>
-      <PartnerBrands index="03" />
+      <RitualSteps />
+      <PartnerBrands index="04" />
       <Testimonials
-        index="04"
+        index="06"
         eyebrow="Quem usa, fala"
         title="Recados de quem nos acompanha."
         testimonials={TESTIMONIALS}
       />
+      <NewsletterCTA />
+      <Faq />
     </main>
   );
 }
