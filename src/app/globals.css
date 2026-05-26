@@ -3,20 +3,20 @@
 @theme {
   /* Paleta editorial Lamora — cremes quentes + tinta profunda.
      Calibrada a partir do design Lamora.html (chat 2026-05-25). */
-  --color-background: #f2eee5;
-  --color-background-2: #ece7dc;
-  --color-foreground: #1e1a14;
-  --color-foreground-soft: #3b342b;
-  --color-surface: #ede8dd;
-  --color-surface-2: #e5dfd2;
-  --color-muted: #8c8478;
-  --color-muted-2: #a8a294;
-  --color-border: rgba(30, 26, 20, 0.1);
-  --color-border-soft: rgba(30, 26, 20, 0.06);
-  --color-primary: #1e1a14;
-  --color-primary-foreground: #f5f1e8;
-  --color-accent: #b08d57;
-  --color-accent-foreground: #1e1a14;
+  --color-background: #f7f1f1;
+  --color-background-2: #efe8e9;
+  --color-foreground: #1a1719;
+  --color-foreground-soft: #383234;
+  --color-surface: #f2ecec;
+  --color-surface-2: #e8e1e3;
+  --color-muted: #837e82;
+  --color-muted-2: #a09ba0;
+  --color-border: rgba(26, 23, 25, 0.1);
+  --color-border-soft: rgba(26, 23, 25, 0.06);
+  --color-primary: #1a1719;
+  --color-primary-foreground: #f7f1f1;
+  --color-accent: #9c7b78;
+  --color-accent-foreground: #1a1719;
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-serif:
