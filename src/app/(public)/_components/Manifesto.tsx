@@ -23,19 +23,25 @@ const VALUES = [
   },
 ] as const;
 
-export function Manifesto() {
+interface ManifestoProps {
+  index?: string;
+}
+
+export function Manifesto({ index }: ManifestoProps = {}) {
   return (
     <section className="bg-background-2 border-border-soft border-t border-b">
       <div className="mx-auto max-w-6xl px-6 py-24 lg:py-28">
         <div className="grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
           <div>
-            <Text
-              variant="eyebrow"
-              as="span"
-              className="mb-5 block text-[11px] tracking-[0.18em]"
-            >
-              — Princípios
-            </Text>
+            <div className="text-muted mb-6 flex items-center gap-3 text-[11px] font-medium tracking-[0.18em] uppercase">
+              {index ? (
+                <>
+                  <span className="text-foreground tabular-nums">{index}</span>
+                  <span aria-hidden className="bg-muted-2 h-px w-9" />
+                </>
+              ) : null}
+              <span>Princípios</span>
+            </div>
             <Text
               variant="h1"
               className="font-serif text-[1.875rem] leading-[1.18] tracking-[-0.015em] lg:text-[2.125rem]"

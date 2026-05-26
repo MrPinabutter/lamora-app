@@ -1,7 +1,10 @@
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { Suspense } from "react";
-import { ProductGridSkeleton } from "@/features/products";
+import {
+  getFeaturedFragrance,
+  getFeaturedProducts,
+  getProductBrands,
+} from "@/features/products/services/product.service";
 import {
   Disciplines,
   type Discipline,
@@ -65,7 +68,49 @@ const TESTIMONIALS: ReadonlyArray<Testimonial> = [
   },
 ];
 
-export default function HomePage() {
+type SectionKey =
+  | "top-sales"
+  | "disciplines"
+  | "fragrance"
+  | "principles"
+  | "ritual"
+  | "brands"
+  | "testimonials"
+  | "newsletter"
+  | "faq";
+
+export default async function HomePage() {
+  // Pré-busca para decidir a numeração editorial: seções vazias (sem produtos,
+  // sem perfume em destaque, sem marcas) somem da página e não consomem número.
+  // Os services usam `cache()`, então as chamadas dentro dos componentes são
+  // deduplicadas.
+  const [featuredProducts, featuredFragrance, brands] = await Promise.all([
+    getFeaturedProducts(4),
+    getFeaturedFragrance(),
+    getProductBrands(),
+  ]);
+
+  const visibleSections: ReadonlyArray<SectionKey> = (
+    [
+      featuredProducts.length > 0 ? "top-sales" : null,
+      "disciplines",
+      featuredFragrance ? "fragrance" : null,
+      "principles",
+      "ritual",
+      brands.length > 0 ? "brands" : null,
+      "testimonials",
+      "newsletter",
+      "faq",
+    ] as ReadonlyArray<SectionKey | null>
+  ).filter((key): key is SectionKey => key !== null);
+
+  const indexFor = (key: SectionKey): string | undefined => {
+    const position = visibleSections.indexOf(key);
+    return position === -1
+      ? undefined
+      : String(position + 1).padStart(2, "0");
+  };
+
   return (
     <main className="page-texture relative isolate flex flex-1 flex-col overflow-hidden">
       <Hero
@@ -101,35 +146,31 @@ export default function HomePage() {
         }
         scrollHint="Role para descobrir"
       />
-      <Manifesto />
+      {featuredProducts.length > 0 ? (
+        <FeaturedProducts index={indexFor("top-sales")} />
+      ) : null}
       <Disciplines
-        index="01"
+        index={indexFor("disciplines")}
         eyebrow="Disciplinas"
         title="O que cuidamos por aqui."
         disciplines={DISCIPLINES}
       />
-      <FeaturedFragrance />
-      <Suspense
-        fallback={
-          <section className="border-border-soft border-b">
-            <div className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
-              <ProductGridSkeleton />
-            </div>
-          </section>
-        }
-      >
-        <FeaturedProducts index="02" />
-      </Suspense>
-      <RitualSteps />
-      <PartnerBrands index="04" />
+      {featuredFragrance ? (
+        <FeaturedFragrance index={indexFor("fragrance")} />
+      ) : null}
+      <Manifesto index={indexFor("principles")} />
+      <RitualSteps index={indexFor("ritual")} />
+      {brands.length > 0 ? (
+        <PartnerBrands index={indexFor("brands")} />
+      ) : null}
       <Testimonials
-        index="06"
+        index={indexFor("testimonials")}
         eyebrow="Quem usa, fala"
         title="Recados de quem nos acompanha."
         testimonials={TESTIMONIALS}
       />
-      <NewsletterCTA />
-      <Faq />
+      <NewsletterCTA index={indexFor("newsletter")} />
+      <Faq index={indexFor("faq")} />
     </main>
   );
 }

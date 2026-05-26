@@ -15,7 +15,13 @@ function joinNotes(notes: ReadonlyArray<OlfactoryNote>): string {
   return notes.map((note) => note.name.toLowerCase()).join(", ");
 }
 
-export async function FeaturedFragrance() {
+interface FeaturedFragranceProps {
+  index?: string;
+}
+
+export async function FeaturedFragrance({
+  index,
+}: FeaturedFragranceProps = {}) {
   const fragrance = await getFeaturedFragrance();
   if (!fragrance) return null;
 
@@ -49,9 +55,11 @@ export async function FeaturedFragrance() {
                 className="object-cover"
               />
             ) : null}
-            <span className="text-foreground/60 absolute top-6 left-6 text-[10px] tracking-[0.22em] uppercase">
-              No. 07
-            </span>
+            {index ? (
+              <span className="text-foreground/60 absolute top-6 left-6 text-[10px] tracking-[0.22em] uppercase">
+                No. {index}
+              </span>
+            ) : null}
             <span className="text-foreground/60 absolute top-6 right-6 text-[10px] tracking-[0.22em] uppercase">
               Eau de Parfum
             </span>
@@ -62,9 +70,13 @@ export async function FeaturedFragrance() {
 
           <div className="flex flex-col justify-center">
             <div className="text-muted flex items-center gap-3 text-[11px] font-medium tracking-[0.18em] uppercase">
+              {index ? (
+                <>
+                  <span className="text-foreground tabular-nums">{index}</span>
+                  <span aria-hidden className="bg-muted-2 h-px w-9" />
+                </>
+              ) : null}
               <span className="text-foreground">Aroma do mês</span>
-              <span aria-hidden className="bg-muted-2 h-px w-9" />
-              <span>No. 07</span>
             </div>
 
             <Text

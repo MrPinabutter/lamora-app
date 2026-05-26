@@ -3,10 +3,14 @@
 import { useState, type FormEvent } from "react";
 import { Text } from "@/shared/components/atoms/Text";
 
+interface NewsletterCTAProps {
+  index?: string;
+}
+
 // Formulário apenas visual no MVP. Quando houver provedor de e-mail
 // (ex.: Resend, ConvertKit), trocar `handleSubmit` por uma Server Action que
 // registre o opt-in e dispare a primeira mensagem.
-export function NewsletterCTA() {
+export function NewsletterCTA({ index }: NewsletterCTAProps = {}) {
   const [sent, setSent] = useState(false);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -18,8 +22,12 @@ export function NewsletterCTA() {
     <section className="bg-background border-border-soft border-t">
       <div className="mx-auto max-w-6xl px-6 py-24 text-center lg:py-32">
         <div className="text-muted mb-7 inline-flex items-center gap-3 text-[11px] font-medium tracking-[0.18em] uppercase">
-          <span className="text-foreground tabular-nums">07</span>
-          <span aria-hidden className="bg-muted-2 h-px w-9" />
+          {index ? (
+            <>
+              <span className="text-foreground tabular-nums">{index}</span>
+              <span aria-hidden className="bg-muted-2 h-px w-9" />
+            </>
+          ) : null}
           <span>Caderno de notícias</span>
         </div>
         <Text

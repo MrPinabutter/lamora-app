@@ -30,15 +30,23 @@ const STEPS: ReadonlyArray<Step> = [
   },
 ];
 
-export function RitualSteps() {
+interface RitualStepsProps {
+  index?: string;
+}
+
+export function RitualSteps({ index }: RitualStepsProps = {}) {
   return (
     <section className="bg-background-2 border-border-soft border-t border-b">
       <div className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
         <header className="mb-14 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
           <div className="max-w-md space-y-6">
             <div className="text-muted flex items-center gap-3 text-[11px] font-medium tracking-[0.18em] uppercase">
-              <span className="text-foreground tabular-nums">03</span>
-              <span aria-hidden className="bg-muted-2 h-px w-9" />
+              {index ? (
+                <>
+                  <span className="text-foreground tabular-nums">{index}</span>
+                  <span aria-hidden className="bg-muted-2 h-px w-9" />
+                </>
+              ) : null}
               <span>Ritual de curadoria</span>
             </div>
             <Text
