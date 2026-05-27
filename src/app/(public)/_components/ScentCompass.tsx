@@ -1,6 +1,13 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import {
+  type CSSProperties,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Text } from "@/shared/components/atoms/Text";
 
 interface Family {
@@ -106,8 +113,23 @@ interface ScentCompassProps {
   index?: string;
 }
 
+interface Particle {
+  id: string;
+  sx: number;
+  sy: number;
+  ex: number;
+  ey: number;
+  r: number;
+  color: string;
+  duration: number;
+  delay: number;
+  peak: number;
+}
+
 export function ScentCompass({ index }: ScentCompassProps = {}) {
   const [activeIdx, setActiveIdx] = useState(0);
+  const [particles, setParticles] = useState<ReadonlyArray<Particle>>([]);
+  const skipInitialBurstRef = useRef(true);
   const family = FAMILIAS[activeIdx] ?? FAMILIAS[0]!;
 
   const wedges = useMemo(
@@ -130,6 +152,52 @@ export function ScentCompass({ index }: ScentCompassProps = {}) {
 
   const handleSelect = useCallback((i: number) => {
     setActiveIdx(i);
+  }, []);
+
+  const burstParticles = useCallback((idx: number) => {
+    const f = FAMILIAS[idx];
+    if (!f) return;
+    const wedgeAngle = idx * SEG;
+    const count = 14;
+    const burstId = `${idx}-${Date.now().toString(36)}`;
+    const next: Particle[] = Array.from({ length: count }, (_, i) => {
+      const spread = (Math.random() - 0.5) * 48;
+      const angle = wedgeAngle + spread;
+      const startR = R_IN + 8 + Math.random() * 22;
+      const endR = R_OUT + 10 + Math.random() * 28;
+      const [sx, sy] = polar(startR, angle);
+      const [ex, ey] = polar(endR, angle);
+      return {
+        id: `${burstId}-${i}`,
+        sx,
+        sy,
+        ex,
+        ey,
+        r: 1.2 + Math.random() * 2.4,
+        color: f.color,
+        duration: 1700 + Math.random() * 1300,
+        delay: Math.random() * 800,
+        peak: 0.45 + Math.random() * 0.4,
+      };
+    });
+    setParticles((prev) => {
+      const merged = [...prev, ...next];
+      // cap total in-flight particles so rapid sweeps stay calm
+      return merged.length > 64 ? merged.slice(merged.length - 64) : merged;
+    });
+  }, []);
+
+  useEffect(() => {
+    if (skipInitialBurstRef.current) {
+      skipInitialBurstRef.current = false;
+      return;
+    }
+    const timer = window.setTimeout(() => burstParticles(activeIdx), 90);
+    return () => window.clearTimeout(timer);
+  }, [activeIdx, burstParticles]);
+
+  const handleParticleEnd = useCallback((id: string) => {
+    setParticles((prev) => prev.filter((p) => p.id !== id));
   }, []);
 
   return (
@@ -209,6 +277,28 @@ export function ScentCompass({ index }: ScentCompassProps = {}) {
                     />
                   );
                 })}
+              </g>
+
+              <g aria-hidden style={{ pointerEvents: "none" }}>
+                {particles.map((p) => (
+                  <g
+                    key={p.id}
+                    className="scent-particle"
+                    style={
+                      {
+                        animation: `scent-particle ${p.duration}ms cubic-bezier(0.22, 0.61, 0.36, 1) ${p.delay}ms both`,
+                        "--sx": `${p.sx}px`,
+                        "--sy": `${p.sy}px`,
+                        "--ex": `${p.ex}px`,
+                        "--ey": `${p.ey}px`,
+                        "--peak": p.peak,
+                      } as CSSProperties
+                    }
+                    onAnimationEnd={() => handleParticleEnd(p.id)}
+                  >
+                    <circle r={p.r} fill={p.color} />
+                  </g>
+                ))}
               </g>
 
               <g style={{ pointerEvents: "none" }}>
@@ -380,6 +470,31 @@ export function ScentCompass({ index }: ScentCompassProps = {}) {
         @keyframes scent-chip {
           from { opacity: 0; transform: translateY(6px); }
           to   { opacity: 1; transform: translateY(0); }
+        }
+        .scent-particle {
+          will-change: transform, opacity;
+          transform-box: view-box;
+          transform-origin: 0 0;
+          mix-blend-mode: multiply;
+        }
+        @keyframes scent-particle {
+          0% {
+            transform: translate(var(--sx), var(--sy)) scale(0.35);
+            opacity: 0;
+          }
+          18% {
+            opacity: var(--peak, 0.6);
+          }
+          70% {
+            opacity: calc(var(--peak, 0.6) * 0.35);
+          }
+          100% {
+            transform: translate(var(--ex), var(--ey)) scale(2.1);
+            opacity: 0;
+          }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .scent-particle { display: none; }
         }
       `}</style>
     </section>
