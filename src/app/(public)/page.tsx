@@ -21,6 +21,7 @@ import { Manifesto } from "./_components/Manifesto";
 import { NewsletterCTA } from "./_components/NewsletterCTA";
 import { PartnerBrands } from "./_components/PartnerBrands";
 import { RitualSteps } from "./_components/RitualSteps";
+import { ScentCompass } from "./_components/ScentCompass";
 
 const HERO_META = ["Est. 2026", "Brasil", "Curadoria Independente"] as const;
 
@@ -72,6 +73,7 @@ type SectionKey =
   | "top-sales"
   | "disciplines"
   | "fragrance"
+  | "compass"
   | "principles"
   | "ritual"
   | "brands"
@@ -95,6 +97,7 @@ export default async function HomePage() {
       featuredProducts.length > 0 ? "top-sales" : null,
       "disciplines",
       featuredFragrance ? "fragrance" : null,
+      "compass",
       "principles",
       "ritual",
       brands.length > 0 ? "brands" : null,
@@ -158,6 +161,7 @@ export default async function HomePage() {
       {featuredFragrance ? (
         <FeaturedFragrance index={indexFor("fragrance")} />
       ) : null}
+      <ScentCompass index={indexFor("compass")} />
       <Manifesto index={indexFor("principles")} />
       <RitualSteps index={indexFor("ritual")} />
       {brands.length > 0 ? (
