@@ -14,6 +14,7 @@ interface Family {
   name: string;
   n: string;
   color: string;
+  smokeColor?: string;
   mood: string;
   notas: ReadonlyArray<string>;
   occWhen: string;
@@ -58,6 +59,7 @@ const FAMILIAS: ReadonlyArray<Family> = [
     name: "Amadeirado",
     n: "05",
     color: "oklch(0.70 0.07 55)",
+    smokeColor: "oklch(0.96 0.008 80)",
     mood: "Mesa de madeira quente, café que esfria devagar.",
     notas: ["cedro", "sândalo", "vetiver", "gaiac", "pau-rosa"],
     occWhen: "meias-estações, noites longas, dias em que se busca conforto.",
@@ -74,6 +76,7 @@ const FAMILIAS: ReadonlyArray<Family> = [
     name: "Couro",
     n: "07",
     color: "oklch(0.55 0.06 45)",
+    smokeColor: "oklch(0.96 0.008 80)",
     mood: "Caderno antigo, casaco esquecido na cadeira.",
     notas: ["suede", "cuir", "tabaco", "bétula", "iso-E super"],
     occWhen: "noite, ocasiões formais, quando se quer marcar presença.",
@@ -119,11 +122,14 @@ interface Particle {
   sy: number;
   ex: number;
   ey: number;
-  r: number;
+  rx: number;
+  ry: number;
+  rotation: number;
   color: string;
   duration: number;
   delay: number;
   peak: number;
+  whiteSmoke: boolean;
 }
 
 export function ScentCompass({ index }: ScentCompassProps = {}) {
@@ -157,33 +163,42 @@ export function ScentCompass({ index }: ScentCompassProps = {}) {
   const burstParticles = useCallback((idx: number) => {
     const f = FAMILIAS[idx];
     if (!f) return;
+    const smokeFill = f.smokeColor ?? f.color;
+    const isWhiteSmoke = f.smokeColor !== undefined;
     const wedgeAngle = idx * SEG;
-    const count = 14;
+    const count = 28;
     const burstId = `${idx}-${Date.now().toString(36)}`;
     const next: Particle[] = Array.from({ length: count }, (_, i) => {
-      const spread = (Math.random() - 0.5) * 48;
+      const spread = (Math.random() - 0.5) * 46;
       const angle = wedgeAngle + spread;
-      const startR = R_IN + 8 + Math.random() * 22;
-      const endR = R_OUT + 10 + Math.random() * 28;
+      const startR = R_IN + 2 + Math.random() * 22;
+      const endR = R_OUT + 14 + Math.random() * 22;
       const [sx, sy] = polar(startR, angle);
       const [ex, ey] = polar(endR, angle);
+      const r = 3.5 + Math.random() * 6.5;
+      const aspect = 0.7 + Math.random() * 0.6;
       return {
         id: `${burstId}-${i}`,
         sx,
         sy,
         ex,
         ey,
-        r: 1.2 + Math.random() * 2.4,
-        color: f.color,
-        duration: 1700 + Math.random() * 1300,
-        delay: Math.random() * 800,
-        peak: 0.45 + Math.random() * 0.4,
+        rx: r * aspect,
+        ry: r / aspect,
+        rotation: Math.random() * 360,
+        color: smokeFill,
+        duration: 2800 + Math.random() * 2400,
+        delay: Math.random() * 1600,
+        peak: isWhiteSmoke
+          ? 0.32 + Math.random() * 0.3
+          : 0.13 + Math.random() * 0.22,
+        whiteSmoke: isWhiteSmoke,
       };
     });
     setParticles((prev) => {
       const merged = [...prev, ...next];
       // cap total in-flight particles so rapid sweeps stay calm
-      return merged.length > 64 ? merged.slice(merged.length - 64) : merged;
+      return merged.length > 96 ? merged.slice(merged.length - 96) : merged;
     });
   }, []);
 
@@ -244,6 +259,33 @@ export function ScentCompass({ index }: ScentCompassProps = {}) {
               aria-label={`Roda olfativa — família selecionada: ${family.name}`}
               className="text-foreground block h-auto w-full"
             >
+              <defs>
+                <filter
+                  id="scent-smoke-filter"
+                  x="-25%"
+                  y="-25%"
+                  width="150%"
+                  height="150%"
+                  colorInterpolationFilters="sRGB"
+                >
+                  <feTurbulence
+                    type="fractalNoise"
+                    baseFrequency="0.022"
+                    numOctaves="2"
+                    seed="7"
+                    result="noise"
+                  />
+                  <feDisplacementMap
+                    in="SourceGraphic"
+                    in2="noise"
+                    scale="11"
+                    xChannelSelector="R"
+                    yChannelSelector="G"
+                    result="displaced"
+                  />
+                  <feGaussianBlur in="displaced" stdDeviation="2.6" />
+                </filter>
+              </defs>
               <circle
                 cx={CX}
                 cy={CY}
@@ -279,24 +321,46 @@ export function ScentCompass({ index }: ScentCompassProps = {}) {
                 })}
               </g>
 
-              <g aria-hidden style={{ pointerEvents: "none" }}>
+              <g
+                aria-hidden
+                style={{ pointerEvents: "none" }}
+                filter="url(#scent-smoke-filter)"
+              >
                 {particles.map((p) => (
                   <g
                     key={p.id}
                     className="scent-particle"
+                    data-smoke={p.whiteSmoke ? "white" : undefined}
                     style={
                       {
-                        animation: `scent-particle ${p.duration}ms cubic-bezier(0.22, 0.61, 0.36, 1) ${p.delay}ms both`,
+                        animation: `scent-smoke-pos ${p.duration}ms cubic-bezier(0.22, 0.6, 0.36, 1) ${p.delay}ms both`,
                         "--sx": `${p.sx}px`,
                         "--sy": `${p.sy}px`,
                         "--ex": `${p.ex}px`,
                         "--ey": `${p.ey}px`,
-                        "--peak": p.peak,
                       } as CSSProperties
                     }
-                    onAnimationEnd={() => handleParticleEnd(p.id)}
+                    onAnimationEnd={(e) => {
+                      if (e.target === e.currentTarget)
+                        handleParticleEnd(p.id);
+                    }}
                   >
-                    <circle r={p.r} fill={p.color} />
+                    <g
+                      className="scent-particle-grow"
+                      style={
+                        {
+                          animation: `scent-smoke-grow ${p.duration}ms linear ${p.delay}ms both`,
+                          "--peak": p.peak,
+                        } as CSSProperties
+                      }
+                    >
+                      <ellipse
+                        rx={p.rx}
+                        ry={p.ry}
+                        fill={p.color}
+                        transform={`rotate(${p.rotation})`}
+                      />
+                    </g>
                   </g>
                 ))}
               </g>
@@ -472,24 +536,36 @@ export function ScentCompass({ index }: ScentCompassProps = {}) {
           to   { opacity: 1; transform: translateY(0); }
         }
         .scent-particle {
-          will-change: transform, opacity;
+          will-change: transform;
           transform-box: view-box;
           transform-origin: 0 0;
           mix-blend-mode: multiply;
         }
-        @keyframes scent-particle {
+        .scent-particle[data-smoke="white"] {
+          mix-blend-mode: screen;
+        }
+        .scent-particle-grow {
+          will-change: transform, opacity;
+          transform-box: fill-box;
+          transform-origin: center;
+        }
+        @keyframes scent-smoke-pos {
+          from { transform: translate(var(--sx), var(--sy)); }
+          to   { transform: translate(var(--ex), var(--ey)); }
+        }
+        @keyframes scent-smoke-grow {
           0% {
-            transform: translate(var(--sx), var(--sy)) scale(0.35);
+            transform: scale(0.45);
             opacity: 0;
           }
-          18% {
-            opacity: var(--peak, 0.6);
+          14% {
+            opacity: var(--peak, 0.3);
           }
-          70% {
-            opacity: calc(var(--peak, 0.6) * 0.35);
+          82% {
+            opacity: calc(var(--peak, 0.3) * 0.35);
           }
           100% {
-            transform: translate(var(--ex), var(--ey)) scale(2.1);
+            transform: scale(3.2);
             opacity: 0;
           }
         }
