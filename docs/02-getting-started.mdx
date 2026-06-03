@@ -46,6 +46,19 @@ cp .env.example .env
       </td>
       <td>Store phone number for WhatsApp checkout</td>
     </tr>
+    <tr>
+      <td>
+        <code>AUTH_SECRET</code>
+      </td>
+      <td>
+        HMAC-SHA256 secret used to sign session cookies. Generate a unique value
+        with:{" "}
+        <code>
+          node -e
+          "const&#123;randomBytes&#125;=require('crypto');console.log(randomBytes(32).toString('hex'))"
+        </code>
+      </td>
+    </tr>
   </tbody>
 </table>
 
