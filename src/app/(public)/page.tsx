@@ -5,6 +5,7 @@ import {
   getFeaturedProducts,
   getProductBrands,
 } from "@/features/products/services/product.service";
+import { readSession } from "@/server/auth/session";
 import {
   Disciplines,
   type Discipline,
@@ -91,6 +92,7 @@ export default async function HomePage() {
     getFeaturedFragrance(),
     getProductBrands(),
   ]);
+  const session = await readSession();
 
   const visibleSections: ReadonlyArray<SectionKey> = (
     [
@@ -114,6 +116,46 @@ export default async function HomePage() {
       : String(position + 1).padStart(2, "0");
   };
 
+  const heroActions = session ? (
+    <>
+      <Link
+        href="/perfil"
+        className="bg-primary text-primary-foreground hover:bg-foreground focus-visible:ring-primary focus-visible:ring-offset-background inline-flex h-12 items-center justify-center rounded-full px-9 text-[12px] font-medium tracking-[0.18em] uppercase transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+      >
+        Meu perfil
+      </Link>
+      <Link
+        href="/produtos"
+        className="text-foreground hover:text-accent focus-visible:ring-primary group inline-flex items-center gap-2 rounded-sm py-1 text-[12px] font-medium tracking-[0.18em] uppercase transition-colors focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none"
+      >
+        Ver Catálogo
+        <ArrowRight
+          className="size-3.5 transition-transform group-hover:translate-x-1"
+          aria-hidden
+        />
+      </Link>
+    </>
+  ) : (
+    <>
+      <Link
+        href="/cadastro"
+        className="bg-primary text-primary-foreground hover:bg-foreground focus-visible:ring-primary focus-visible:ring-offset-background inline-flex h-12 items-center justify-center rounded-full px-9 text-[12px] font-medium tracking-[0.18em] uppercase transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+      >
+        Criar conta
+      </Link>
+      <Link
+        href="/produtos"
+        className="text-foreground hover:text-accent focus-visible:ring-primary group inline-flex items-center gap-2 rounded-sm py-1 text-[12px] font-medium tracking-[0.18em] uppercase transition-colors focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none"
+      >
+        Ver Catálogo
+        <ArrowRight
+          className="size-3.5 transition-transform group-hover:translate-x-1"
+          aria-hidden
+        />
+      </Link>
+    </>
+  );
+
   return (
     <main className="page-texture relative isolate flex flex-1 flex-col overflow-hidden">
       <Hero
@@ -127,26 +169,7 @@ export default async function HomePage() {
         }
         description="Uma seleção pensada para o seu ritmo. Crie sua conta para receber lançamentos em primeira mão e salvar suas favoritas."
         meta={HERO_META}
-        actions={
-          <>
-            <Link
-              href="/cadastro"
-              className="bg-primary text-primary-foreground hover:bg-foreground focus-visible:ring-primary focus-visible:ring-offset-background inline-flex h-12 items-center justify-center rounded-full px-9 text-[12px] font-medium tracking-[0.18em] uppercase transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
-            >
-              Criar conta
-            </Link>
-            <Link
-              href="/produtos"
-              className="text-foreground hover:text-accent focus-visible:ring-primary group inline-flex items-center gap-2 rounded-sm py-1 text-[12px] font-medium tracking-[0.18em] uppercase transition-colors focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none"
-            >
-              Ver Catálogo
-              <ArrowRight
-                className="size-3.5 transition-transform group-hover:translate-x-1"
-                aria-hidden
-              />
-            </Link>
-          </>
-        }
+        actions={heroActions}
         scrollHint="Role para descobrir"
       />
       {featuredProducts.length > 0 ? (

@@ -7,6 +7,7 @@ import {
 } from "@/shared/components/molecules/SiteNav";
 import { CartButton } from "./_components/CartButton";
 import { SiteFooter } from "./_components/SiteFooter";
+import { UserButton } from "./_components/UserButton";
 
 const NAV_LINKS: ReadonlyArray<SiteNavLink> = [
   { href: "/produtos", label: "Produtos" },
@@ -41,6 +42,7 @@ export default function PublicLayout({
           </Link>
           <div className="flex items-center gap-8">
             <SiteNav links={NAV_LINKS} />
+            <UserButton />
             <CartButton />
           </div>
         </nav>

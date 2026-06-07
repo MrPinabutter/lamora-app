@@ -83,9 +83,9 @@ export async function UserButton() {
       <Link
         href="/perfil"
         aria-label="Meu perfil"
-        className="focus-visible:ring-primary rounded-sm focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none"
+        className="text-foreground hover:text-accent focus-visible:ring-primary inline-flex size-9 items-center justify-center rounded-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none"
       >
-        <User className="size-5" aria-hidden />
+        <User className="size-4" aria-hidden />
       </Link>
     );
   }
@@ -93,9 +93,13 @@ export async function UserButton() {
   return (
     <Link
       href="/login"
-      className="focus-visible:ring-primary rounded-sm focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none"
+      className="focus-visible:ring-primary group inline-flex rounded-sm py-1 focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none"
     >
-      <Text variant="eyebrow" as="span">
+      <Text
+        variant="eyebrow"
+        as="span"
+        className="text-muted transition-colors group-hover:text-foreground"
+      >
         Entrar
       </Text>
     </Link>
