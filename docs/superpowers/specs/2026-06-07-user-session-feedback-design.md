@@ -2,6 +2,7 @@
 
 **Date:** 2026-06-07  
 **Status:** Approved  
+**Living doc:** `docs/07-session-feedback.mdx`  
 
 ## Problem
 

@@ -1,0 +1,162 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Documentation/Session Feedback" />
+
+# Session Feedback
+
+When a user is authenticated, two parts of the public layout adapt to reflect
+that state: the **navigation header** and the **homepage Hero**. Both are
+Server Components, so the session is read at render time — no client state,
+no flash, no skeleton.
+
+## How the session is read
+
+The session lives in an httpOnly cookie signed with HMAC-SHA256. It is read
+via `readSession()` from `@/server/auth/session`, which is a server-only
+utility. It returns `SessionPayload | null` — `null` on any failure (missing
+cookie, bad signature, expired token). Both touch points treat `null` as "not
+logged in"; the unauthenticated UI is always the safe fallback.
+
+```ts
+import { readSession } from "@/server/auth/session";
+
+const session = await readSession();
+const isLoggedIn = session !== null;
+```
+
+---
+
+## `UserButton`
+
+**Location:** `src/app/(public)/_components/UserButton.tsx`
+
+A Server Component that sits in the sticky nav header, between the `SiteNav`
+links and the `CartButton`. It renders one of two states depending on whether
+a valid session exists.
+
+<table>
+  <thead>
+    <tr>
+      <th>Session state</th>
+      <th>Renders</th>
+      <th>Destination</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Logged in</td>
+      <td>
+        <code>User</code> icon button (lucide-react, <code>aria-label="Meu perfil"</code>)
+      </td>
+      <td>
+        <code>/perfil</code>
+      </td>
+    </tr>
+    <tr>
+      <td>Not logged in</td>
+      <td>Text link "Entrar" — eyebrow style, matches SiteNav</td>
+      <td>
+        <code>/login</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+The icon button uses the same `focus-visible` ring pattern as `CartButton`.
+Color inherits from `currentColor` — the icon follows the surrounding text
+color without any extra class. The "Entrar" text link uses `Text variant="eyebrow"`
+to stay consistent with the `SiteNav` link style.
+
+### Anatomy
+
+```tsx
+import Link from "next/link";
+import { User } from "lucide-react";
+import { readSession } from "@/server/auth/session";
+import { Text } from "@/shared/components/atoms/Text";
+
+export async function UserButton() {
+  const session = await readSession();
+
+  if (session) {
+    return (
+      <Link
+        href="/perfil"
+        aria-label="Meu perfil"
+        className="focus-visible:ring-primary rounded-sm focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none"
+      >
+        <User className="size-5" aria-hidden />
+      </Link>
+    );
+  }
+
+  return (
+    <Link
+      href="/login"
+      className="focus-visible:ring-primary rounded-sm focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none"
+    >
+      <Text variant="eyebrow" as="span">
+        Entrar
+      </Text>
+    </Link>
+  );
+}
+```
+
+### Placement in the header
+
+```
+[Logo]          [Produtos]  [UserButton]  [CartButton]
+```
+
+`UserButton` is added to the right-side flex group in `PublicLayout`
+(`src/app/(public)/layout.tsx`). It reads the session internally, so no
+props are passed from the layout.
+
+---
+
+## Homepage Hero adaptation
+
+The homepage (`src/app/(public)/page.tsx`) reads the session once and passes
+different `actions` to the `<Hero>` component. The `Hero` itself is unchanged —
+it already accepts `actions` as a `ReactNode` prop.
+
+<table>
+  <thead>
+    <tr>
+      <th>Session state</th>
+      <th>Primary CTA</th>
+      <th>Secondary CTA</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Not logged in</td>
+      <td>"Criar conta" → <code>/cadastro</code></td>
+      <td>"Ver Catálogo" → <code>/produtos</code></td>
+    </tr>
+    <tr>
+      <td>Logged in</td>
+      <td>"Meu perfil" → <code>/perfil</code></td>
+      <td>"Ver Catálogo" → <code>/produtos</code></td>
+    </tr>
+  </tbody>
+</table>
+
+The CTA buttons reuse the exact class strings already present in `page.tsx`
+— only the label text and `href` change between states. No new design tokens.
+
+---
+
+## Rules
+
+1. **Server Component only.** `UserButton` reads an httpOnly cookie — it must
+   never become a Client Component. `"use client"` here would expose the
+   session read to the browser bundle.
+2. **No prop drilling.** `UserButton` reads the session internally. The layout
+   does not need to know or pass auth state.
+3. **Null is safe.** Any read failure (network, corrupt cookie, clock skew)
+   returns `null` and renders the unauthenticated state without throwing.
+4. **`/perfil` remains protected.** The page-level session guard
+   (`if (!session) redirect("/login")`) in `PerfilPage` is the source of
+   truth. `UserButton` is a shortcut, not a bypass.
