@@ -31,7 +31,8 @@ export async function requestProductImageUploadAction(
   try {
     const urls = await createProductImageUploadUrl(parsed.data.contentType);
     return { ok: true, ...urls };
-  } catch {
+  } catch (error) {
+    console.error("error", error);
     return { ok: false, error: "Não foi possível preparar o upload." };
   }
 }
