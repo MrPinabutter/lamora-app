@@ -5,6 +5,7 @@ import { Drawer } from "@/shared/components/organisms/Drawer/Drawer";
 import { Text } from "@/shared/components/atoms/Text";
 import { CartLineItem } from "./CartLineItem";
 import { CartSummary } from "./CartSummary";
+import { useCartSync } from "../hooks/useCartSync";
 import { useStoreHydrated } from "../hooks/useStoreHydrated";
 
 interface CartSidebarProps {
@@ -16,6 +17,7 @@ export function CartSidebar({ storePhone }: CartSidebarProps) {
   const items = useAppStore((state) => state.items);
   const close = useAppStore((state) => state.close);
   const hydrated = useStoreHydrated();
+  useCartSync();
 
   const showEmpty = hydrated && items.length === 0;
 

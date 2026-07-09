@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { AdminProductList } from "@/features/admin-products";
 import { listAdminProducts } from "@/features/admin-products/services/admin-product.service";
+import { ProductFilters, parseProductFilters } from "@/features/products";
+import { getProductBrands } from "@/features/products/services/product.service";
 import { Text } from "@/shared/components/atoms/Text";
 
 export const metadata: Metadata = {
@@ -10,8 +12,18 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminProductsPage() {
-  const products = await listAdminProducts();
+interface AdminProductsPageProps {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}
+
+export default async function AdminProductsPage({
+  searchParams,
+}: AdminProductsPageProps) {
+  const filters = parseProductFilters(await searchParams);
+  const [products, brands] = await Promise.all([
+    listAdminProducts(filters),
+    getProductBrands(),
+  ]);
 
   return (
     <div className="space-y-8">
@@ -29,7 +41,15 @@ export default async function AdminProductsPage() {
           Novo produto
         </Link>
       </header>
-      <AdminProductList products={products} />
+
+      <div className="flex flex-col gap-12 lg:flex-row lg:gap-16">
+        <aside className="lg:w-56 lg:shrink-0">
+          <ProductFilters brands={brands} />
+        </aside>
+        <div className="flex-1">
+          <AdminProductList products={products} />
+        </div>
+      </div>
     </div>
   );
 }

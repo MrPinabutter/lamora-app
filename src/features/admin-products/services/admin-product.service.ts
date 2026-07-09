@@ -48,8 +48,29 @@ export type AdminProductMutationResult =
   | { ok: true; id: string }
   | { ok: false; reason: "slug-taken" | "not-found" };
 
-export async function listAdminProducts(): Promise<AdminProductListRow[]> {
+export interface AdminProductListFilters {
+  category?: AdminProductInput["category"];
+  brand?: string;
+  minPrice?: number;
+  maxPrice?: number;
+}
+
+export async function listAdminProducts(
+  filters: AdminProductListFilters = {},
+): Promise<AdminProductListRow[]> {
+  const price = {
+    ...(filters.minPrice !== undefined ? { gte: filters.minPrice } : {}),
+    ...(filters.maxPrice !== undefined ? { lte: filters.maxPrice } : {}),
+  };
+
   const rows = await db.product.findMany({
+    where: {
+      ...(filters.category ? { category: filters.category } : {}),
+      ...(filters.brand
+        ? { brand: { equals: filters.brand, mode: "insensitive" } }
+        : {}),
+      ...(Object.keys(price).length > 0 ? { price } : {}),
+    },
     orderBy: { createdAt: "desc" },
     include: {
       images: {

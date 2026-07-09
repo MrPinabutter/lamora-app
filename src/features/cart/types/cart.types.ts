@@ -1,5 +1,4 @@
 export interface CartItem {
-  /** Identificador do produto (mesmo `Product.id`). */
   id: string;
   slug: string;
   name: string;
@@ -8,3 +7,5 @@ export interface CartItem {
   imageUrl?: string;
   quantity: number;
 }
+
+export type CartProductSnapshot = Omit<CartItem, "quantity">;

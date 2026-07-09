@@ -87,6 +87,17 @@ export async function getProducts(filters: ProductFilters): Promise<Product[]> {
   return rows.map(toProduct);
 }
 
+export async function getProductsByIds(ids: string[]): Promise<Product[]> {
+  if (ids.length === 0) return [];
+
+  const rows = await db.product.findMany({
+    where: { id: { in: ids } },
+    include: PRODUCT_INCLUDE,
+  });
+
+  return rows.map(toProduct);
+}
+
 export const getProductBySlug = cache(
   async (slug: string): Promise<Product | null> => {
     const row = await db.product.findUnique({

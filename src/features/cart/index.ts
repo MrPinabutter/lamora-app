@@ -3,6 +3,7 @@ export { CartLineItem } from "./components/CartLineItem";
 export { CartSidebar } from "./components/CartSidebar";
 export { CartSummary } from "./components/CartSummary";
 
+export { useCartSync } from "./hooks/useCartSync";
 export { useStoreHydrated } from "./hooks/useStoreHydrated";
 
 export {
@@ -11,4 +12,4 @@ export {
   cartSubtotal,
 } from "./lib/whatsapp-message";
 
-export type { CartItem } from "./types/cart.types";
+export type { CartItem, CartProductSnapshot } from "./types/cart.types";

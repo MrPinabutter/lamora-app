@@ -1,5 +1,5 @@
 import type { StateCreator } from "zustand";
-import type { CartItem } from "../types/cart.types";
+import type { CartItem, CartProductSnapshot } from "../types/cart.types";
 
 export interface CartSlice {
   items: CartItem[];
@@ -7,6 +7,7 @@ export interface CartSlice {
   addItem: (item: CartItem) => void;
   removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
+  syncItems: (products: CartProductSnapshot[]) => void;
   clear: () => void;
   open: () => void;
   close: () => void;
@@ -25,7 +26,9 @@ export const createCartSlice: StateCreator<
       if (item.quantity <= 0) return;
       const existing = state.items.find((current) => current.id === item.id);
       if (existing) {
-        existing.quantity += item.quantity;
+        const { quantity, ...snapshot } = item;
+        Object.assign(existing, snapshot);
+        existing.quantity += quantity;
         return;
       }
       state.items.push(item);
@@ -42,6 +45,17 @@ export const createCartSlice: StateCreator<
       }
       const target = state.items.find((item) => item.id === id);
       if (target) target.quantity = quantity;
+    }),
+  syncItems: (products) =>
+    set((state) => {
+      const freshById = new Map(
+        products.map((product) => [product.id, product]),
+      );
+      state.items = state.items.flatMap((item) => {
+        const fresh = freshById.get(item.id);
+        if (!fresh) return [];
+        return [{ ...fresh, quantity: item.quantity }];
+      });
     }),
   clear: () =>
     set((state) => {
