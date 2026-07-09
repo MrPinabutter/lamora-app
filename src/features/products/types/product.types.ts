@@ -39,6 +39,7 @@ export type SortOption = "relevance" | "price-asc" | "price-desc" | "newest";
 
 /** Filtros aplicados à listagem, refletidos na URL. */
 export interface ProductFilters {
+  q?: string;
   category?: Category;
   brand?: string;
   minPrice?: number;

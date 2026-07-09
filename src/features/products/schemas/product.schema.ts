@@ -29,6 +29,10 @@ const optionalPrice = z.preprocess(
 );
 
 export const productFiltersSchema = z.object({
+  q: z.preprocess(
+    emptyToUndefined,
+    z.string().trim().min(1).optional().catch(undefined),
+  ),
   category: z.preprocess(
     emptyToUndefined,
     z.enum(CATEGORY_VALUES).optional().catch(undefined),

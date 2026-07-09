@@ -34,10 +34,12 @@ export function ProductFilters({ brands }: ProductFiltersProps) {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const q = data.get("q");
     const category = data.get("category");
     const brand = data.get("brand");
 
     setFilters({
+      q: typeof q === "string" && q.trim().length > 0 ? q.trim() : undefined,
       category: isCategory(category) ? category : undefined,
       brand: typeof brand === "string" && brand.length > 0 ? brand : undefined,
       minPrice: readPrice(data.get("minPrice")),
@@ -46,6 +48,7 @@ export function ProductFilters({ brands }: ProductFiltersProps) {
   };
 
   const hasActiveFilters =
+    filters.q !== undefined ||
     filters.category !== undefined ||
     filters.brand !== undefined ||
     filters.minPrice !== undefined ||
@@ -54,6 +57,7 @@ export function ProductFilters({ brands }: ProductFiltersProps) {
   // Remonta o formulário (inputs não-controlados) quando os filtros mudam
   // por fora — por exemplo ao limpar.
   const formKey = [
+    filters.q,
     filters.category,
     filters.brand,
     filters.minPrice,
@@ -67,6 +71,19 @@ export function ProductFilters({ brands }: ProductFiltersProps) {
       </div>
 
       <div className="space-y-6">
+        <div>
+          <label htmlFor="filter-q" className={LABEL_CLASS}>
+            Nome
+          </label>
+          <Input
+            id="filter-q"
+            type="search"
+            name="q"
+            placeholder="Buscar por nome"
+            defaultValue={filters.q ?? ""}
+          />
+        </div>
+
         <div>
           <label htmlFor="filter-category" className={LABEL_CLASS}>
             Categoria

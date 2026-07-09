@@ -74,6 +74,9 @@ export async function getProducts(filters: ProductFilters): Promise<Product[]> {
 
   const rows = await db.product.findMany({
     where: {
+      ...(filters.q
+        ? { name: { contains: filters.q, mode: "insensitive" } }
+        : {}),
       ...(filters.category ? { category: filters.category } : {}),
       ...(filters.brand
         ? { brand: { equals: filters.brand, mode: "insensitive" } }

@@ -49,6 +49,7 @@ export type AdminProductMutationResult =
   | { ok: false; reason: "slug-taken" | "not-found" };
 
 export interface AdminProductListFilters {
+  q?: string;
   category?: AdminProductInput["category"];
   brand?: string;
   minPrice?: number;
@@ -65,6 +66,9 @@ export async function listAdminProducts(
 
   const rows = await db.product.findMany({
     where: {
+      ...(filters.q
+        ? { name: { contains: filters.q, mode: "insensitive" } }
+        : {}),
       ...(filters.category ? { category: filters.category } : {}),
       ...(filters.brand
         ? { brand: { equals: filters.brand, mode: "insensitive" } }

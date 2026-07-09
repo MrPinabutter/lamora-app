@@ -7,6 +7,7 @@ import {
 } from "@/shared/components/molecules/SiteNav";
 import { AdminButton } from "./_components/AdminButton";
 import { CartButton } from "./_components/CartButton";
+import { SearchButton } from "./_components/SearchButton";
 import { SiteFooter } from "./_components/SiteFooter";
 import { UserButton } from "./_components/UserButton";
 
@@ -44,6 +45,7 @@ export default function PublicLayout({
           <div className="flex items-center gap-8">
             <SiteNav links={NAV_LINKS} />
             <AdminButton />
+            <SearchButton />
             <UserButton />
             <CartButton />
           </div>

@@ -4,7 +4,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { parseProductFilters } from "../schemas/product.schema";
 import type { ProductFilters } from "../types/product.types";
 
-const FILTER_KEYS = ["category", "brand", "minPrice", "maxPrice"] as const;
+const FILTER_KEYS = ["q", "category", "brand", "minPrice", "maxPrice"] as const;
 
 export function useProductFilters() {
   const router = useRouter();
