@@ -43,7 +43,7 @@ export function Faq({ index }: FaqProps = {}) {
     <section className="bg-background-2 border-border-soft border-t">
       <div className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
         <div className="grid gap-16 lg:grid-cols-[1fr_1.6fr] lg:gap-24">
-          <div>
+          <div data-reveal>
             <div className="text-muted mb-6 flex items-center gap-3 text-[11px] font-medium tracking-[0.18em] uppercase">
               {index ? (
                 <>
@@ -80,7 +80,7 @@ export function Faq({ index }: FaqProps = {}) {
             </a>
           </div>
 
-          <div className="border-border border-t">
+          <div data-reveal className="border-border border-t [--reveal-delay:120ms]">
             {ITEMS.map((item, index) => (
               <details
                 key={item.question}

@@ -44,7 +44,7 @@ interface FooterColumnProps {
 function FooterColumn({ title, links }: FooterColumnProps) {
   return (
     <div>
-      <h5 className="text-[#9C9683] mb-6 text-[11px] font-medium tracking-[0.22em] uppercase">
+      <h5 className="text-ink-muted mb-6 text-[11px] font-medium tracking-[0.22em] uppercase">
         {title}
       </h5>
       <ul className="flex flex-col gap-3">
@@ -52,7 +52,7 @@ function FooterColumn({ title, links }: FooterColumnProps) {
           <li key={link.label}>
             <Link
               href={link.href}
-              className="text-[#E8E2D2] text-sm transition-colors hover:text-[#F5F1E8]"
+              className="text-ink-foreground hover:text-ink-foreground-strong text-sm transition-colors"
             >
               {link.label}
             </Link>
@@ -65,18 +65,18 @@ function FooterColumn({ title, links }: FooterColumnProps) {
 
 export function SiteFooter() {
   return (
-    <footer className="bg-[#1E1A14] text-[#E8E2D2]">
+    <footer className="bg-ink text-ink-foreground">
       <div className="mx-auto max-w-6xl px-6 pt-20 pb-9">
-        <div className="grid gap-12 border-b border-[rgba(232,226,210,0.12)] pb-14 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:gap-16">
+        <div className="border-ink-border grid gap-12 border-b pb-14 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:gap-16">
           <div>
             <Text
               variant="h2"
               as="p"
-              className="mb-5 font-serif text-2xl font-normal tracking-[0.3em] text-[#F5F1E8]"
+              className="text-ink-foreground-strong mb-5 font-serif text-2xl font-normal tracking-[0.3em]"
             >
               L A M O R A
             </Text>
-            <p className="mb-7 max-w-xs text-sm leading-[1.7] text-[#9C9683]">
+            <p className="text-ink-muted mb-7 max-w-xs text-sm leading-[1.7]">
               Perfumaria e cuidados, escolhidos com calma. Atendimento de
               segunda a sexta, das 10h às 18h.
             </p>
@@ -86,7 +86,7 @@ export function SiteFooter() {
                   key={label}
                   href={href}
                   aria-label={label}
-                  className="inline-grid size-9 place-items-center rounded-full border border-[rgba(232,226,210,0.2)] text-[#E8E2D2] transition-all hover:border-[rgba(232,226,210,0.4)] hover:bg-[rgba(245,241,232,0.06)]"
+                  className="border-ink-foreground/20 text-ink-foreground hover:border-ink-foreground/40 hover:bg-ink-foreground-strong/6 inline-grid size-9 place-items-center rounded-full border transition-all"
                 >
                   <Icon className="size-3.5" aria-hidden />
                 </a>
@@ -97,7 +97,7 @@ export function SiteFooter() {
           <FooterColumn title="Sobre" links={ABOUT_LINKS} />
           <FooterColumn title="Ajuda" links={HELP_LINKS} />
         </div>
-        <div className="flex flex-col gap-4 pt-8 text-[11.5px] text-[#7A7464] sm:flex-row sm:items-center sm:justify-between">
+        <div className="text-ink-muted-2 flex flex-col gap-4 pt-8 text-[11.5px] sm:flex-row sm:items-center sm:justify-between">
           <span>
             © {new Date().getUTCFullYear()} Lamora Curadoria Ltda. — CNPJ
             00.000.000/0001-00
@@ -107,7 +107,7 @@ export function SiteFooter() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="transition-colors hover:text-[#E8E2D2]"
+                  className="hover:text-ink-foreground transition-colors"
                 >
                   {link.label}
                 </Link>

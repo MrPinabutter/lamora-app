@@ -10,6 +10,7 @@ import {
   Disciplines,
   type Discipline,
 } from "@/shared/components/organisms/Disciplines";
+import { ScrollReveal } from "@/shared/components/atoms/ScrollReveal";
 import { Hero } from "@/shared/components/organisms/Hero";
 import {
   Testimonials,
@@ -83,10 +84,6 @@ type SectionKey =
   | "faq";
 
 export default async function HomePage() {
-  // Pré-busca para decidir a numeração editorial: seções vazias (sem produtos,
-  // sem perfume em destaque, sem marcas) somem da página e não consomem número.
-  // Os services usam `cache()`, então as chamadas dentro dos componentes são
-  // deduplicadas.
   const [featuredProducts, featuredFragrance, brands] = await Promise.all([
     getFeaturedProducts(4),
     getFeaturedFragrance(),
@@ -111,23 +108,20 @@ export default async function HomePage() {
 
   const indexFor = (key: SectionKey): string | undefined => {
     const position = visibleSections.indexOf(key);
-    return position === -1
-      ? undefined
-      : String(position + 1).padStart(2, "0");
+    return position === -1 ? undefined : String(position + 1).padStart(2, "0");
   };
+
+  const primaryCtaClass =
+    "bg-wood-foreground text-wood hover:bg-[#3d2818] focus-visible:ring-ember focus-visible:ring-offset-wood inline-flex h-13 items-center justify-center rounded-full px-10 text-[12px] font-medium tracking-[0.2em] uppercase shadow-[0_16px_48px_-18px_rgba(43,28,16,0.35)] transition-all duration-300 hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none";
+  const secondaryCtaClass =
+    "text-wood-foreground hover:text-ember focus-visible:ring-ember group inline-flex items-center gap-2 rounded-sm py-1 text-[12px] font-medium tracking-[0.2em] uppercase transition-colors focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none";
 
   const heroActions = session ? (
     <>
-      <Link
-        href="/perfil"
-        className="bg-primary text-primary-foreground hover:bg-foreground focus-visible:ring-primary focus-visible:ring-offset-background inline-flex h-12 items-center justify-center rounded-full px-9 text-[12px] font-medium tracking-[0.18em] uppercase transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
-      >
+      <Link href="/perfil" className={primaryCtaClass}>
         Meu perfil
       </Link>
-      <Link
-        href="/produtos"
-        className="text-foreground hover:text-accent focus-visible:ring-primary group inline-flex items-center gap-2 rounded-sm py-1 text-[12px] font-medium tracking-[0.18em] uppercase transition-colors focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none"
-      >
+      <Link href="/produtos" className={secondaryCtaClass}>
         Ver Catálogo
         <ArrowRight
           className="size-3.5 transition-transform group-hover:translate-x-1"
@@ -137,16 +131,10 @@ export default async function HomePage() {
     </>
   ) : (
     <>
-      <Link
-        href="/cadastro"
-        className="bg-primary text-primary-foreground hover:bg-foreground focus-visible:ring-primary focus-visible:ring-offset-background inline-flex h-12 items-center justify-center rounded-full px-9 text-[12px] font-medium tracking-[0.18em] uppercase transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
-      >
+      <Link href="/cadastro" className={primaryCtaClass}>
         Criar conta
       </Link>
-      <Link
-        href="/produtos"
-        className="text-foreground hover:text-accent focus-visible:ring-primary group inline-flex items-center gap-2 rounded-sm py-1 text-[12px] font-medium tracking-[0.18em] uppercase transition-colors focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none"
-      >
+      <Link href="/produtos" className={secondaryCtaClass}>
         Ver Catálogo
         <ArrowRight
           className="size-3.5 transition-transform group-hover:translate-x-1"
@@ -159,12 +147,15 @@ export default async function HomePage() {
   return (
     <main className="page-texture relative isolate flex flex-1 flex-col overflow-hidden">
       <Hero
+        variant="wood"
         eyebrow="Perfumaria · Curadoria"
         title={
           <>
             Fragrâncias e cuidados,
             <br />
-            escolhidos com calma.
+            <em className="text-ember/95 font-normal italic">
+              escolhidos com calma.
+            </em>
           </>
         }
         description="Uma seleção pensada para o seu ritmo. Crie sua conta para receber lançamentos em primeira mão e salvar suas favoritas."
@@ -187,9 +178,7 @@ export default async function HomePage() {
       <ScentCompass index={indexFor("compass")} />
       <Manifesto index={indexFor("principles")} />
       <RitualSteps index={indexFor("ritual")} />
-      {brands.length > 0 ? (
-        <PartnerBrands index={indexFor("brands")} />
-      ) : null}
+      {brands.length > 0 ? <PartnerBrands index={indexFor("brands")} /> : null}
       <Testimonials
         index={indexFor("testimonials")}
         eyebrow="Quem usa, fala"
@@ -198,6 +187,7 @@ export default async function HomePage() {
       />
       <NewsletterCTA index={indexFor("newsletter")} />
       <Faq index={indexFor("faq")} />
+      <ScrollReveal />
     </main>
   );
 }

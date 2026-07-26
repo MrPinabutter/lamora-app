@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { Text } from "@/shared/components/atoms/Text";
 
 export interface Testimonial {
@@ -23,7 +24,7 @@ export function Testimonials({
   return (
     <section className="bg-background-2 border-border-soft border-t border-b">
       <div className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
-        <header className="mb-12 max-w-md space-y-6 lg:mb-16">
+        <header data-reveal className="mb-12 max-w-md space-y-6 lg:mb-16">
           <div className="text-muted flex items-center gap-3 text-[11px] font-medium tracking-[0.18em] uppercase">
             {index ? (
               <>
@@ -44,6 +45,10 @@ export function Testimonials({
           {testimonials.map((testimonial, position) => (
             <li
               key={testimonial.author}
+              data-reveal
+              style={
+                { "--reveal-delay": `${position * 110}ms` } as CSSProperties
+              }
               className="border-border space-y-10 p-10 md:border-r md:last:border-r-0"
             >
               <Text

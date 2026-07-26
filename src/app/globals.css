@@ -18,8 +18,84 @@
   --color-accent: #9c7b78;
   --color-accent-foreground: #1a1719;
 
+  /* Painel de madeira clara — o hero "light oak" que abre a página. Tokens
+     quentes que conversam com as famílias amadeirada, âmbar e couro da
+     bússola olfativa. Vivem no mesmo espaço de cor do resto do tema. */
+  --color-wood: #ddc7a4;
+  --color-wood-2: #cdb083;
+  --color-wood-foreground: #2b1c10;
+  --color-wood-muted: #5f4b38;
+  --color-ember: #6b4423;
+
+  /* Tinta escura — a mesma superfície do rodapé, agora também usada no
+     header. Framea a página com chrome escuro em cima e embaixo. */
+  --color-ink: #1e1a14;
+  --color-ink-foreground: #e8e2d2;
+  --color-ink-foreground-strong: #f5f1e8;
+  --color-ink-muted: #9c9683;
+  --color-ink-muted-2: #7a7464;
+  --color-ink-border: rgba(232, 226, 210, 0.12);
+
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-serif:
     var(--font-spectral), "Cormorant Garamond", Georgia, "Times New Roman",
     serif;
+}
+
+/* Grão de papel quase imperceptível sobre a página inteira — dá tato às áreas
+   cremes sem competir com o texto. A textura da madeira do hero mora no próprio
+   componente; aqui é só o "papel" que a envolve. */
+.page-texture::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+}
+
+/* --- Movimento -------------------------------------------------------------
+   Elementos marcados com `data-reveal` nascem abaixados + esmaecidos e sobem
+   ao entrar na viewport (o ScrollReveal liga `.is-visible`). Só escondemos
+   quando o movimento é bem-vindo — quem pede menos animação recebe tudo já
+   posicionado, sem depender de JS. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(32px);
+    transition:
+      opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+  }
+  [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Abertura do hero — fade-up encenado no primeiro quadro. */
+  .hero-enter {
+    opacity: 0;
+    transform: translateY(22px);
+    animation: hero-enter 1.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: var(--hero-delay, 0ms);
+  }
+  @keyframes hero-enter {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* Marca-d'água editorial: numeral gigante que sangra atrás de um bloco. */
+.section-numeral {
+  font-family: var(--font-serif);
+  font-style: italic;
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+  color: var(--color-foreground);
+  opacity: 0.045;
 }

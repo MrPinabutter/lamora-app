@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import { CartSidebar } from "@/features/cart";
 import { Text } from "@/shared/components/atoms/Text";
@@ -22,7 +23,22 @@ export default function PublicLayout({
 
   return (
     <>
-      <header className="border-border-soft bg-background/85 sticky top-0 z-40 border-b backdrop-blur">
+      {/* Header em tinta escura — o mesmo chrome do rodapé, agora também no
+          topo. As variáveis abaixo reescopam os tokens semânticos (foreground,
+          muted, border, primary) só dentro do header: os componentes filhos
+          (SiteNav, AdminButton, SearchButton, UserButton, CartButton) usam
+          essas classes sem saber que estão sobre um fundo escuro. */}
+      <header
+        className="border-ink-border bg-ink/92 sticky top-0 z-40 border-b backdrop-blur"
+        style={
+          {
+            "--color-foreground": "var(--color-ink-foreground)",
+            "--color-muted": "var(--color-ink-muted)",
+            "--color-border": "var(--color-ink-border)",
+            "--color-primary": "var(--color-ink-foreground)",
+          } as CSSProperties
+        }
+      >
         <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6 lg:h-20">
           <Link
             href="/"
@@ -35,7 +51,7 @@ export default function PublicLayout({
               className="font-serif text-lg font-medium tracking-[0.32em] uppercase"
             >
               <img
-                src="logo.svg"
+                src="logo-light.svg"
                 alt="Lamora"
                 width={130}
                 className="h-auto w-40"

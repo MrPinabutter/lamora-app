@@ -31,7 +31,7 @@ export function ProductCard({ product, action }: ProductCardProps) {
               alt={product.name}
               fill
               sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-              className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+              className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
             />
           ) : (
             <Text
@@ -59,7 +59,10 @@ export function ProductCard({ product, action }: ProductCardProps) {
           >
             {product.shortDesc}
           </Text>
-          <Text variant="body" tone="muted" className="pt-1 text-[13px]">
+          <Text
+            as="p"
+            className="text-foreground pt-1.5 font-serif text-[16px] tracking-tight"
+          >
             {formatBRL(product.price)}
           </Text>
         </div>

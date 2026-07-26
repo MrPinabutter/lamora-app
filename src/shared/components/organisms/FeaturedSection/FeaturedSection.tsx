@@ -24,7 +24,10 @@ export function FeaturedSection({
   return (
     <section className="border-border-soft border-b">
       <div className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
-        <header className="mb-14 flex flex-wrap items-end justify-between gap-x-12 gap-y-6 lg:mb-20">
+        <header
+          data-reveal
+          className="mb-14 flex flex-wrap items-end justify-between gap-x-12 gap-y-6 lg:mb-20"
+        >
           <div className="max-w-md space-y-6">
             <div className="text-muted flex items-center gap-3 text-[11px] font-medium tracking-[0.18em] uppercase">
               {index ? (

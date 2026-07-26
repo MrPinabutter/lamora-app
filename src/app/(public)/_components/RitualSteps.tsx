@@ -1,5 +1,5 @@
 import { Check, Plus, Search } from "lucide-react";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { Text } from "@/shared/components/atoms/Text";
 
 interface Step {
@@ -38,7 +38,10 @@ export function RitualSteps({ index }: RitualStepsProps = {}) {
   return (
     <section className="bg-background-2 border-border-soft border-t border-b">
       <div className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
-        <header className="mb-14 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
+        <header
+          data-reveal
+          className="mb-14 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between lg:gap-16"
+        >
           <div className="max-w-md space-y-6">
             <div className="text-muted flex items-center gap-3 text-[11px] font-medium tracking-[0.18em] uppercase">
               {index ? (
@@ -68,10 +71,14 @@ export function RitualSteps({ index }: RitualStepsProps = {}) {
         </header>
 
         <ol className="border-border grid border-t md:grid-cols-3">
-          {STEPS.map((step) => (
+          {STEPS.map((step, position) => (
             <li
               key={step.numeral}
-              className="border-border relative space-y-3 p-10 md:border-r md:last:border-r-0 lg:p-12"
+              data-reveal
+              style={
+                { "--reveal-delay": `${position * 110}ms` } as CSSProperties
+              }
+              className="border-border group relative space-y-3 p-10 transition-colors md:border-r md:last:border-r-0 lg:p-12"
             >
               <span className="border-border text-muted absolute top-10 right-10 inline-grid size-9 place-items-center rounded-full border lg:top-12 lg:right-12">
                 {step.icon}
@@ -79,7 +86,7 @@ export function RitualSteps({ index }: RitualStepsProps = {}) {
               <Text
                 variant="display"
                 as="span"
-                className="block font-serif text-[5.5rem] leading-none font-light tracking-[-0.04em]"
+                className="block font-serif text-[5.5rem] leading-none font-light tracking-[-0.04em] transition-colors duration-500 group-hover:text-accent"
               >
                 {step.numeral}
               </Text>

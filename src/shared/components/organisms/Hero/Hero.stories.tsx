@@ -60,6 +60,43 @@ export const WithMultilineTitle: Story = {
   },
 };
 
+export const Wood: Story = {
+  args: {
+    variant: "wood",
+    eyebrow: "Perfumaria · curadoria",
+    title: (
+      <>
+        Fragrâncias e cuidados,
+        <br />
+        <em className="text-ember/95 font-normal italic">
+          escolhidos com calma.
+        </em>
+      </>
+    ),
+    description:
+      "Uma seleção pensada para o seu ritmo. Crie sua conta para receber lançamentos em primeira mão e salvar suas favoritas.",
+    meta: ["Est. 2026", "Brasil", "Curadoria independente"],
+    scrollHint: "Role para descobrir",
+    actions: (
+      <>
+        <a
+          href="#"
+          className="bg-wood-foreground text-wood inline-flex h-12 items-center justify-center rounded-full px-9 text-[12px] font-medium tracking-[0.18em] uppercase transition-colors hover:bg-[#3d2818]"
+        >
+          Criar conta
+        </a>
+        <a
+          href="#"
+          className="text-wood-foreground hover:text-ember inline-flex items-center gap-2 rounded-sm py-1 text-[12px] font-medium tracking-[0.18em] uppercase transition-colors"
+        >
+          Ver catálogo
+          <ArrowRight className="size-3.5" aria-hidden />
+        </a>
+      </>
+    ),
+  },
+};
+
 export const WithMeta: Story = {
   args: {
     eyebrow: "Perfumaria · curadoria",

@@ -21,6 +21,7 @@ export async function FeaturedProducts({ index }: FeaturedProductsProps = {}) {
     >
       <ProductGrid
         products={products}
+        reveal
         renderAction={(product) => {
           const image =
             product.images.find((img) => img.isPrimary) ?? product.images[0];

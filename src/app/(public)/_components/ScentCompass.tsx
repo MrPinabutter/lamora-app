@@ -221,7 +221,10 @@ export function ScentCompass({ index }: ScentCompassProps = {}) {
       className="border-border-soft from-background to-background-2 relative overflow-hidden border-t border-b bg-gradient-to-b"
     >
       <div className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
-        <header className="mb-12 flex flex-col gap-8 lg:mb-16 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
+        <header
+          data-reveal
+          className="mb-12 flex flex-col gap-8 lg:mb-16 lg:flex-row lg:items-end lg:justify-between lg:gap-16"
+        >
           <div className="max-w-md space-y-6">
             <div className="text-muted flex items-center gap-3 text-[11px] font-medium tracking-[0.18em] uppercase">
               {index ? (

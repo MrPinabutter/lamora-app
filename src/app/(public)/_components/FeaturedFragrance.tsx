@@ -45,14 +45,17 @@ export async function FeaturedFragrance({
     <section className="bg-background-2 border-border-soft border-t border-b">
       <div className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
         <div className="grid items-stretch gap-16 lg:grid-cols-2 lg:gap-24">
-          <div className="bg-surface-2 relative aspect-[4/5] overflow-hidden lg:aspect-auto lg:h-full lg:min-h-[640px]">
+          <div
+            data-reveal
+            className="bg-surface-2 group relative aspect-[4/5] overflow-hidden lg:aspect-auto lg:h-full lg:min-h-[640px]"
+          >
             {primary ? (
               <Image
                 src={primary.url}
                 alt={fragrance.name}
                 fill
                 sizes="(min-width: 1024px) 40vw, 100vw"
-                className="object-cover"
+                className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
               />
             ) : null}
             {index ? (
@@ -68,7 +71,10 @@ export async function FeaturedFragrance({
             </span>
           </div>
 
-          <div className="flex flex-col justify-center">
+          <div
+            data-reveal
+            className="flex flex-col justify-center [--reveal-delay:140ms]"
+          >
             <div className="text-muted flex items-center gap-3 text-[11px] font-medium tracking-[0.18em] uppercase">
               {index ? (
                 <>
