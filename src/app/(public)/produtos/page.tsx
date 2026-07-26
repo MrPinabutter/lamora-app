@@ -11,8 +11,12 @@ import {
 import {
   getProductBrands,
   getProducts,
+  getRandomProducts,
 } from "@/features/products/services/product.service";
-import type { ProductFilters as ProductFiltersValue } from "@/features/products/types/product.types";
+import type {
+  Product,
+  ProductFilters as ProductFiltersValue,
+} from "@/features/products/types/product.types";
 import { Text } from "@/shared/components/atoms/Text";
 
 export const metadata: Metadata = {
@@ -25,29 +29,45 @@ interface ProductsPageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-async function ProductResults({ filters }: { filters: ProductFiltersValue }) {
-  const products = await getProducts(filters);
+function renderAddToCart(product: Product) {
+  const image =
+    product.images.find((img) => img.isPrimary) ?? product.images[0];
   return (
-    <ProductGrid
-      products={products}
-      renderAction={(product) => {
-        const image =
-          product.images.find((img) => img.isPrimary) ?? product.images[0];
-        return (
-          <AddToCartButton
-            productId={product.id}
-            slug={product.slug}
-            name={product.name}
-            brand={product.brand}
-            price={product.price}
-            imageUrl={image?.url}
-            stock={product.stock}
-            className="w-full"
-          />
-        );
-      }}
+    <AddToCartButton
+      productId={product.id}
+      slug={product.slug}
+      name={product.name}
+      brand={product.brand}
+      price={product.price}
+      imageUrl={image?.url}
+      stock={product.stock}
+      className="w-full"
     />
   );
+}
+
+async function ProductResults({ filters }: { filters: ProductFiltersValue }) {
+  const products = await getProducts(filters);
+
+  if (products.length === 0 && filters.q) {
+    const suggestions = await getRandomProducts(filters);
+    return (
+      <div className="space-y-10">
+        <div className="flex flex-col items-center gap-2 py-8 text-center">
+          <Text variant="eyebrow">Nenhum resultado</Text>
+          <Text variant="body" tone="muted" className="max-w-sm">
+            Não encontramos produtos para &ldquo;{filters.q}&rdquo;. Confira
+            sugestões parecidas do nosso catálogo.
+          </Text>
+        </div>
+        {suggestions.length > 0 ? (
+          <ProductGrid products={suggestions} renderAction={renderAddToCart} />
+        ) : null}
+      </div>
+    );
+  }
+
+  return <ProductGrid products={products} renderAction={renderAddToCart} />;
 }
 
 export default async function ProductsPage({

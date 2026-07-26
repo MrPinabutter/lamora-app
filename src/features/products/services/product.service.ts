@@ -24,6 +24,35 @@ function orderByForSort(sort: SortOption) {
   }
 }
 
+function buildWhere(filters: Partial<ProductFilters>) {
+  const price = {
+    ...(filters.minPrice !== undefined ? { gte: filters.minPrice } : {}),
+    ...(filters.maxPrice !== undefined ? { lte: filters.maxPrice } : {}),
+  };
+
+  return {
+    ...(filters.q
+      ? { name: { contains: filters.q, mode: "insensitive" as const } }
+      : {}),
+    ...(filters.category ? { category: filters.category } : {}),
+    ...(filters.brand
+      ? { brand: { equals: filters.brand, mode: "insensitive" as const } }
+      : {}),
+    ...(Object.keys(price).length > 0 ? { price } : {}),
+  };
+}
+
+function shuffle<T>(items: T[]): T[] {
+  const result = [...items];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = result[i];
+    result[i] = result[j]!;
+    result[j] = temp!;
+  }
+  return result;
+}
+
 type ProductRow = {
   id: string;
   slug: string;
@@ -67,23 +96,33 @@ function toProduct(row: ProductRow): Product {
 }
 
 export async function getProducts(filters: ProductFilters): Promise<Product[]> {
-  const price = {
-    ...(filters.minPrice !== undefined ? { gte: filters.minPrice } : {}),
-    ...(filters.maxPrice !== undefined ? { lte: filters.maxPrice } : {}),
-  };
+  const rows = await db.product.findMany({
+    where: buildWhere(filters),
+    orderBy: orderByForSort(filters.sort),
+    include: PRODUCT_INCLUDE,
+  });
+
+  return rows.map(toProduct);
+}
+
+// Usado quando a busca por nome não retorna nada: sugere produtos aleatórios
+// que respeitam os demais filtros ativos (categoria, marca, preço), ignorando
+// apenas o termo de busca.
+export async function getRandomProducts(
+  filters: ProductFilters,
+  limit = 4,
+): Promise<Product[]> {
+  const where = buildWhere({ ...filters, q: undefined });
+
+  const candidates = await db.product.findMany({
+    where,
+    select: { id: true },
+  });
+  const pickedIds = shuffle(candidates.map((row) => row.id)).slice(0, limit);
+  if (pickedIds.length === 0) return [];
 
   const rows = await db.product.findMany({
-    where: {
-      ...(filters.q
-        ? { name: { contains: filters.q, mode: "insensitive" } }
-        : {}),
-      ...(filters.category ? { category: filters.category } : {}),
-      ...(filters.brand
-        ? { brand: { equals: filters.brand, mode: "insensitive" } }
-        : {}),
-      ...(Object.keys(price).length > 0 ? { price } : {}),
-    },
-    orderBy: orderByForSort(filters.sort),
+    where: { id: { in: pickedIds } },
     include: PRODUCT_INCLUDE,
   });
 

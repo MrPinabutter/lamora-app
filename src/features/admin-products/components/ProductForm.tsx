@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { type Resolver, useForm, useWatch } from "react-hook-form";
 import { Button } from "@/shared/components/atoms/Button";
+import { CurrencyInput } from "@/shared/components/atoms/CurrencyInput";
 import { Input } from "@/shared/components/atoms/Input";
 import { Text } from "@/shared/components/atoms/Text";
 import { Field } from "@/shared/components/molecules/Field";
@@ -49,6 +50,8 @@ export function ProductForm({ mode, productId, defaults }: ProductFormProps) {
   const { errors, isDirty } = form.formState;
 
   const category = useWatch({ control: form.control, name: "category" });
+  const price = useWatch({ control: form.control, name: "price" });
+  const stock = useWatch({ control: form.control, name: "stock" });
   const images = useWatch({ control: form.control, name: "images" });
   const olfactory = useWatch({ control: form.control, name: "olfactory" });
 
@@ -91,6 +94,16 @@ export function ProductForm({ mode, productId, defaults }: ProductFormProps) {
       isPrimary: hasPrimary ? image.isPrimary : i === 0,
     }));
     form.setValue("images", next, { shouldDirty: true, shouldValidate: true });
+  };
+
+  const handlePriceChange = (value: number) => {
+    form.setValue("price", value, { shouldDirty: true, shouldValidate: true });
+  };
+
+  const handleStockChange = (rawValue: string) => {
+    const digits = rawValue.replace(/\D/g, "").replace(/^0+(?=\d)/, "");
+    const value = digits === "" ? 0 : Number.parseInt(digits, 10);
+    form.setValue("stock", value, { shouldDirty: true, shouldValidate: true });
   };
 
   const handleAddNote = () => {
@@ -194,16 +207,14 @@ export function ProductForm({ mode, productId, defaults }: ProductFormProps) {
           </select>
         </Field>
         <Field
-          label="Preço (R$)"
+          label="Preço"
           htmlFor="product-price"
           error={errors.price?.message}
         >
-          <Input
+          <CurrencyInput
             id="product-price"
-            type="number"
-            step="0.01"
-            min="0"
-            {...form.register("price")}
+            value={price}
+            onValueChange={handlePriceChange}
           />
         </Field>
         <Field
@@ -213,9 +224,10 @@ export function ProductForm({ mode, productId, defaults }: ProductFormProps) {
         >
           <Input
             id="product-stock"
-            type="number"
-            min="0"
-            {...form.register("stock")}
+            type="text"
+            inputMode="numeric"
+            value={String(stock)}
+            onChange={(event) => handleStockChange(event.target.value)}
           />
         </Field>
       </section>

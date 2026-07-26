@@ -44,11 +44,13 @@ export function ProductCard({ product, action }: ProductCardProps) {
           )}
         </div>
         <div className="mt-5 space-y-2">
-          <Text variant="eyebrow">{product.brand}</Text>
+          <Text variant="eyebrow" className="line-clamp-1">
+            {product.brand}
+          </Text>
           <Text
             variant="h3"
             as="h3"
-            className="font-serif text-[15px] leading-snug font-normal tracking-tight"
+            className="line-clamp-2 min-h-[2lh] font-serif text-[15px] leading-snug font-normal tracking-tight"
           >
             {product.name}
           </Text>
