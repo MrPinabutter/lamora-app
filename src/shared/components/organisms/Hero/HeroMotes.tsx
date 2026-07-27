@@ -3,27 +3,6 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
-/**
- * Motas de resina — poeira quente que sobe no facho de luz sobre a madeira
- * clara do hero, como pó suspenso à luz de vela. Tons aprofundados (não os
- * claros do tema) para que a poeira ainda se recorte contra o carvalho
- * claro em vez de se perder nele. Além dos âmbares do ember, a paleta
- * abre para vinho e verde-sálvia — notas que também aparecem na bússola
- * olfativa (couro, botânicos). As cores vivem no espaço do WebGL, fora do
- * tema.
- */
-const MOTE_COLORS = [
-  "#6b4423", // âmbar profundo (o ember do tema)
-  "#8a5a2e", // caramelo
-  "#5c3d20", // ouro velho, quase café
-  "#7a4a45", // rosé profundo (acento da marca)
-  "#9c5c34", // terracota
-  "#7d5029", // trigo tostado
-  "#7a2f3d", // vinho (nota de couro/especiaria)
-  "#5c6b45", // sálvia (nota botânica)
-  "#3d5c56", // verde-azulado profundo (vetiver)
-] as const;
-
 /** Glints usam a mesma família, mas um tom por partícula (não um mix de
  *  dois) — cada faísca "escolhe" uma cor ao nascer. */
 // const GLINT_COLORS = [
@@ -45,50 +24,11 @@ const GLINT_COLORS = [
   "#FFDB66", // amarelo mel claro
 ] as const;
 
-const MOTE_COUNT = 24;
 const GLINT_COUNT = 120;
 
 /** Distância da câmera e FOV fixos → altura visível constante (~8.3 un.). */
 const CAMERA_Z = 10;
 const CAMERA_FOV = 45;
-
-const MOTE_VERTEX = /* glsl */ `
-  varying vec3 vNormal;
-  varying vec3 vViewDir;
-
-  void main() {
-    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-    vNormal = normalize(normalMatrix * normal);
-    vViewDir = normalize(-mvPosition.xyz);
-    gl_Position = projectionMatrix * mvPosition;
-  }
-`;
-
-const MOTE_FRAGMENT = /* glsl */ `
-  uniform vec3 uColor;
-  uniform float uOpacity;
-  varying vec3 vNormal;
-  varying vec3 vViewDir;
-
-  void main() {
-    vec3 normal = normalize(vNormal);
-    vec3 viewDir = normalize(vViewDir);
-
-    // Aro quente + preenchimento suave: uma brasa acesa, não um anel vazado.
-    float facing = abs(dot(normal, viewDir));
-    float fresnel = pow(1.0 - facing, 2.5);
-    float core = facing * facing * 0.16; // miolo levemente aceso
-    vec3 rim = mix(uColor, vec3(1.0), 0.08);
-
-    // Reflexo pontual, mantido quente (não branco) para não virar bolha de sabão.
-    vec3 lightDir = normalize(vec3(0.3, 0.6, 0.7));
-    float highlight = pow(max(dot(normal, lightDir), 0.0), 48.0);
-
-    float alpha = (fresnel * 0.68 + core + 0.05 + highlight * 0.35) * uOpacity;
-    vec3 color = rim + uColor * highlight * 0.6;
-    gl_FragColor = vec4(color, alpha);
-  }
-`;
 
 const GLINT_VERTEX = /* glsl */ `
   attribute float aPhase;
@@ -240,7 +180,7 @@ export function HeroMotes() {
       phases[i] = Math.random();
       speeds[i] = 0.02 + Math.random() * 0.05;
       const color =
-        glintPalette[Math.floor(Math.random() * glintPalette.length)];
+        glintPalette[Math.floor(Math.random() * glintPalette.length)]!;
       colors[i * 3] = color.r;
       colors[i * 3 + 1] = color.g;
       colors[i * 3 + 2] = color.b;
