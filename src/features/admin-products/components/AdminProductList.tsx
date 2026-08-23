@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Pencil, Trash2 } from "lucide-react";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { Button } from "@/shared/components/atoms/Button";
 import { Text } from "@/shared/components/atoms/Text";
 import { CATEGORY_LABELS } from "@/shared/lib/constants";
@@ -17,6 +17,9 @@ interface AdminProductListProps {
 
 export function AdminProductList({ products }: AdminProductListProps) {
   const [pending, startTransition] = useTransition();
+  // Guarda o produto em exclusão para o spinner ficar apenas na linha clicada —
+  // `pending` é compartilhado por toda a lista.
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   if (products.length === 0) {
     return (
@@ -33,8 +36,10 @@ export function AdminProductList({ products }: AdminProductListProps) {
     if (!window.confirm(`Excluir "${name}"? Esta ação não pode ser desfeita.`)) {
       return;
     }
+    setDeletingId(id);
     startTransition(async () => {
       await deleteProductAction(id);
+      setDeletingId(null);
     });
   };
 
@@ -85,9 +90,12 @@ export function AdminProductList({ products }: AdminProductListProps) {
               size="sm"
               onClick={() => handleDelete(product.id, product.name)}
               disabled={pending}
+              loading={deletingId === product.id}
               aria-label={`Excluir ${product.name}`}
             >
-              <Trash2 className="size-4" aria-hidden />
+              {deletingId === product.id ? null : (
+                <Trash2 className="size-4" aria-hidden />
+              )}
             </Button>
           </div>
         </li>

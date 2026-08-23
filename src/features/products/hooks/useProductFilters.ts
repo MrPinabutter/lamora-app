@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useTransition } from "react";
 import { parseProductFilters } from "../schemas/product.schema";
 import type { ProductFilters } from "../types/product.types";
 
@@ -10,14 +11,19 @@ export function useProductFilters() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
 
   const filters = parseProductFilters(
     Object.fromEntries(searchParams.entries()),
   );
 
+  // A transição mantém a lista anterior na tela durante a navegação e expõe
+  // `isPending`, que os controles usam para sinalizar que a busca está em curso.
   const pushParams = (params: URLSearchParams) => {
     const query = params.toString();
-    router.push(query ? `${pathname}?${query}` : pathname, { scroll: false });
+    startTransition(() => {
+      router.push(query ? `${pathname}?${query}` : pathname, { scroll: false });
+    });
   };
 
   const setFilters = (next: Partial<ProductFilters>) => {
@@ -42,5 +48,5 @@ export function useProductFilters() {
     pushParams(params);
   };
 
-  return { filters, setFilters, clearFilters };
+  return { filters, setFilters, clearFilters, isPending };
 }

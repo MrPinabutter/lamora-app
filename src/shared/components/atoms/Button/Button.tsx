@@ -1,5 +1,6 @@
 import type { ButtonHTMLAttributes } from "react";
 import { tv, type VariantProps } from "tailwind-variants";
+import { Spinner } from "../Spinner";
 
 const button = tv({
   base: "inline-flex items-center justify-center gap-2 cursor-pointer rounded-full font-medium transition-colors focus-visible:ring-primary focus-visible:ring-offset-background focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
@@ -23,20 +24,31 @@ const button = tv({
 });
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
-  VariantProps<typeof button>;
+  VariantProps<typeof button> & {
+    /** Exibe um spinner e bloqueia o clique enquanto a ação não conclui. */
+    loading?: boolean;
+  };
 
 export function Button({
   variant,
   size,
   type = "button",
   className,
+  loading = false,
+  disabled,
+  children,
   ...props
 }: ButtonProps) {
   return (
     <button
       type={type}
       className={button({ variant, size, className })}
+      disabled={disabled || loading}
+      aria-busy={loading || undefined}
       {...props}
-    />
+    >
+      {loading ? <Spinner className="size-4" /> : null}
+      {children}
+    </button>
   );
 }

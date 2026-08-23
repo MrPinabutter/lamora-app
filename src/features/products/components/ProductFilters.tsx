@@ -29,7 +29,7 @@ function readPrice(value: FormDataEntryValue | null): number | undefined {
 }
 
 export function ProductFilters({ brands }: ProductFiltersProps) {
-  const { filters, setFilters, clearFilters } = useProductFilters();
+  const { filters, setFilters, clearFilters, isPending } = useProductFilters();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -65,7 +65,12 @@ export function ProductFilters({ brands }: ProductFiltersProps) {
   ].join("|");
 
   return (
-    <form key={formKey} onSubmit={handleSubmit} className="space-y-8">
+    <form
+      key={formKey}
+      onSubmit={handleSubmit}
+      aria-busy={isPending || undefined}
+      className="space-y-8"
+    >
       <div className="border-border space-y-1 border-t pt-5">
         <Text variant="eyebrow">Filtros</Text>
       </div>
@@ -151,8 +156,8 @@ export function ProductFilters({ brands }: ProductFiltersProps) {
       </div>
 
       <div className="flex flex-col gap-2 pt-2">
-        <Button type="submit" size="sm">
-          Aplicar filtros
+        <Button type="submit" size="sm" loading={isPending}>
+          {isPending ? "Aplicando…" : "Aplicar filtros"}
         </Button>
         {hasActiveFilters ? (
           <Button
@@ -160,6 +165,7 @@ export function ProductFilters({ brands }: ProductFiltersProps) {
             variant="ghost"
             size="sm"
             onClick={clearFilters}
+            disabled={isPending}
           >
             Limpar filtros
           </Button>

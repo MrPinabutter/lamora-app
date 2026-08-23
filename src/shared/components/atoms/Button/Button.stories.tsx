@@ -31,3 +31,8 @@ export const Small: Story = { args: { size: "sm" } };
 export const Large: Story = { args: { size: "lg" } };
 
 export const Disabled: Story = { args: { disabled: true } };
+
+/** Enquanto `loading` está ativo o botão exibe o spinner e ignora cliques. */
+export const Loading: Story = {
+  args: { loading: true, children: "Aplicando filtros" },
+};
